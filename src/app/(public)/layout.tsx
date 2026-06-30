@@ -89,7 +89,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
           </div>
           <div className="border-t border-white/8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
             <p className="text-xs text-white/25">
-              © {new Date().getFullYear()} VMF Auto Store. Todos os direitos reservados.
+              © {new Date().getFullYear()} Bruno Cavalcante Freitas — VMF Auto Store. Todos os direitos reservados.
             </p>
             <div className="flex items-center gap-4">
               <a href="https://instagram.com/brunocfreitas_" target="_blank" rel="noopener noreferrer" className="text-white/30 hover:text-white transition-colors">
