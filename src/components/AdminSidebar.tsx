@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { LayoutDashboard, Car, Kanban, TrendingUp, LogOut, ExternalLink } from 'lucide-react'
+import { LayoutDashboard, Car, Kanban, TrendingUp, LogOut, ExternalLink, KeyRound } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import toast from 'react-hot-toast'
 
@@ -57,6 +57,18 @@ export default function AdminSidebar() {
 
       {/* Footer */}
       <div className="p-3 border-t border-white/8 space-y-1">
+        <Link
+          href="/admin/senha"
+          className={cn(
+            'flex items-center gap-3 px-3 py-2.5 rounded-[8px] text-sm transition-colors',
+            isActive('/admin/senha')
+              ? 'bg-[#E86020] text-white'
+              : 'text-white/50 hover:text-white hover:bg-white/6'
+          )}
+        >
+          <KeyRound size={16} />
+          Alterar Senha
+        </Link>
         <Link
           href="/"
           target="_blank"
