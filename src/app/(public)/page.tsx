@@ -62,23 +62,23 @@ export default async function HomePage() {
           </div>
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 w-full pb-24 pt-40">
+        <div className="relative max-w-7xl mx-auto px-4 w-full pb-16 sm:pb-24 pt-20 sm:pt-40">
           <p className="text-[#E86020] text-[11px] font-semibold uppercase tracking-[0.3em] mb-6 flex items-center gap-3">
             <span className="w-8 h-px bg-[#E86020]" />
             VMF Auto Store · Seminovos Premium · Fortaleza, CE
           </p>
-          <h1 className="font-[family-name:var(--font-montserrat)] text-5xl sm:text-6xl lg:text-7xl font-black text-[#0D0D0D] leading-[0.92] tracking-tight mb-6 max-w-3xl">
+          <h1 className="font-[family-name:var(--font-montserrat)] text-4xl sm:text-6xl lg:text-7xl font-black text-[#0D0D0D] leading-[0.92] tracking-tight mb-6 max-w-3xl">
             Seu próximo carro,<br />
             com a <span className="text-[#E86020]">procedência</span><br />
             que você merece.
           </h1>
-          <p className="text-[#0D0D0D]/50 text-base max-w-lg mb-10 leading-relaxed">
+          <p className="text-[#0D0D0D]/50 text-sm sm:text-base max-w-lg mb-8 sm:mb-10 leading-relaxed">
             A única loja em Fortaleza com Auto Center própria. Laudo cautelar 100% aprovado, avaliação justa do seu usado e financiamento nos principais bancos. Tudo num só lugar, do jeito certo.
           </p>
-          <div className="flex flex-wrap items-center gap-4">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 sm:gap-4">
             <Link
               href="/carros"
-              className="bg-[#E86020] hover:bg-[#d4551a] text-white font-semibold text-sm uppercase tracking-wider px-7 py-4 rounded-[10px] transition-colors shadow-[0_4px_24px_rgba(232,96,32,0.25)]"
+              className="bg-[#E86020] hover:bg-[#d4551a] text-white font-semibold text-sm uppercase tracking-wider px-7 py-4 rounded-[10px] transition-colors shadow-[0_4px_24px_rgba(232,96,32,0.25)] text-center"
             >
               Ver veículos
             </Link>
@@ -86,7 +86,7 @@ export default async function HomePage() {
               href={WA_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2.5 bg-[#25D366] hover:bg-[#1fb85a] text-white font-semibold text-sm px-7 py-4 rounded-[10px] transition-colors"
+              className="flex items-center justify-center gap-2.5 bg-[#25D366] hover:bg-[#1fb85a] text-white font-semibold text-sm px-7 py-4 rounded-[10px] transition-colors"
             >
               <WhatsAppIcon />
               WhatsApp
@@ -95,7 +95,7 @@ export default async function HomePage() {
         </div>
 
         <div
-          className="absolute right-0 top-1/2 -translate-y-1/2 -translate-x-6 text-[#0D0D0D]/20 text-[10px] font-semibold uppercase tracking-[0.4em]"
+          className="hidden sm:block absolute right-0 top-1/2 -translate-y-1/2 -translate-x-6 text-[#0D0D0D]/20 text-[10px] font-semibold uppercase tracking-[0.4em]"
           style={{ writingMode: 'vertical-rl' }}
         >
           Role para descobrir
@@ -103,7 +103,7 @@ export default async function HomePage() {
       </section>
 
       {/* ── FEATURED CARS ── */}
-      <section className="py-20 bg-white">
+      <section className="py-14 sm:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-end justify-between mb-10">
             <div>
@@ -146,7 +146,7 @@ export default async function HomePage() {
       </section>
 
       {/* ── DIFFERENTIALS ── */}
-      <section id="diferenciais" className="py-20 bg-[#F0EFED]">
+      <section id="diferenciais" className="py-14 sm:py-20 bg-[#F0EFED]">
         <div className="max-w-7xl mx-auto px-4">
           <p className="text-[#E86020] text-[11px] font-semibold uppercase tracking-[0.25em] mb-4 flex items-center gap-2">
             <span className="w-6 h-px bg-[#E86020]" />
@@ -190,7 +190,7 @@ export default async function HomePage() {
       </section>
 
       {/* ── QUEM É O BRUNO ── */}
-      <section id="sobre" className="py-20 bg-[#0D0D0D]">
+      <section id="sobre" className="py-14 sm:py-20 bg-[#0D0D0D]">
         <div className="max-w-7xl mx-auto px-4">
           <div className="max-w-2xl">
             <p className="text-[#E86020] text-[11px] font-semibold uppercase tracking-[0.25em] mb-4 flex items-center gap-2">
@@ -220,7 +220,7 @@ export default async function HomePage() {
       </section>
 
       {/* ── CONTACT ── */}
-      <section id="contato" className="py-20 bg-[#0D0D0D]">
+      <section id="contato" className="py-14 sm:py-20 bg-[#0D0D0D]">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
 
@@ -237,12 +237,12 @@ export default async function HomePage() {
                 Chama no WhatsApp e fala com o Bruno. A gente mostra o estoque atualizado, avalia seu usado e tira todas as suas dúvidas na hora.
               </p>
 
-              <div className="flex flex-wrap gap-3 mb-10">
+              <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 mb-10">
                 <a
                   href={WA_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2.5 bg-[#25D366] hover:bg-[#1fb85a] text-white font-semibold px-5 py-3 rounded-[10px] transition-colors text-sm"
+                  className="flex items-center justify-center gap-2.5 bg-[#25D366] hover:bg-[#1fb85a] text-white font-semibold px-5 py-3 rounded-[10px] transition-colors text-sm"
                 >
                   <WhatsAppIcon />
                   Falar no WhatsApp
@@ -251,7 +251,7 @@ export default async function HomePage() {
                   href="https://instagram.com/brunocfreitas_"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2.5 border border-white/20 hover:border-white/50 text-white font-semibold px-5 py-3 rounded-[10px] transition-colors text-sm"
+                  className="flex items-center justify-center gap-2.5 border border-white/20 hover:border-white/50 text-white font-semibold px-5 py-3 rounded-[10px] transition-colors text-sm"
                 >
                   <InstagramIcon />
                   Instagram
