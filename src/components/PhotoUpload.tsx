@@ -53,7 +53,7 @@ export default function PhotoUpload({ carId, photos, onUpdate }: PhotoUploadProp
 
   async function setAsPrimary(photoId: string) {
     try {
-      await fetch('/api/upload/primary', {
+      await fetch('/api/upload', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ photo_id: photoId, car_id: carId }),
