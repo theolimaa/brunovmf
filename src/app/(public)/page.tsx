@@ -49,32 +49,36 @@ export default async function HomePage() {
   const [cars, total] = await Promise.all([getFeaturedCars(), getTotalCount()])
 
   return (
-    <>
+    <div className="bg-[#F5F4F2]">
       {/* ── HERO ── */}
-      <section className="relative min-h-[100svh] flex flex-col justify-end overflow-hidden">
-        <div className="absolute inset-0 bg-[#0D0D0D]">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_60%_-10%,rgba(232,96,32,0.12),transparent)]" />
-          <div className="absolute bottom-0 left-0 right-0 h-2/3 bg-gradient-to-t from-[#0D0D0D] via-[#0D0D0D]/80 to-transparent" />
-          <div className="absolute top-1/3 right-8 w-[500px] h-[500px] bg-[#E86020]/4 rounded-full blur-3xl" />
+      <section className="relative min-h-[100svh] flex flex-col justify-end overflow-hidden bg-[#F5F4F2]">
+        {/* Decorative background elements */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-20 right-0 w-[600px] h-[600px] bg-[#E86020]/6 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#E86020]/4 rounded-full blur-3xl" />
+          {/* Large decorative "VMF" text */}
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 text-[#0D0D0D]/[0.03] font-black text-[30vw] leading-none select-none font-[family-name:var(--font-montserrat)] pr-4">
+            VMF
+          </div>
         </div>
 
         <div className="relative max-w-7xl mx-auto px-4 w-full pb-24 pt-40">
           <p className="text-[#E86020] text-[11px] font-semibold uppercase tracking-[0.3em] mb-6 flex items-center gap-3">
             <span className="w-8 h-px bg-[#E86020]" />
-            VMF Auto Store · Seminovos Premium
+            VMF Auto Store · Seminovos Premium · Fortaleza, CE
           </p>
-          <h1 className="font-[family-name:var(--font-montserrat)] text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-[0.92] tracking-tight mb-6">
+          <h1 className="font-[family-name:var(--font-montserrat)] text-5xl sm:text-6xl lg:text-7xl font-black text-[#0D0D0D] leading-[0.92] tracking-tight mb-6 max-w-3xl">
             Seu próximo carro,<br />
             com a <span className="text-[#E86020]">procedência</span><br />
             que você merece.
           </h1>
-          <p className="text-white/50 text-base max-w-lg mb-10 leading-relaxed">
+          <p className="text-[#0D0D0D]/50 text-base max-w-lg mb-10 leading-relaxed">
             Seminovos selecionados com critério. Avaliação justa do seu usado e financiamento nos principais bancos. Tudo num só lugar, do jeito certo.
           </p>
           <div className="flex flex-wrap items-center gap-4">
             <Link
               href="/carros"
-              className="bg-[#E86020] hover:bg-[#d4551a] text-white font-semibold text-sm uppercase tracking-wider px-7 py-4 rounded-[10px] transition-colors shadow-[0_2px_32px_rgba(232,96,32,0.3)]"
+              className="bg-[#E86020] hover:bg-[#d4551a] text-white font-semibold text-sm uppercase tracking-wider px-7 py-4 rounded-[10px] transition-colors shadow-[0_4px_24px_rgba(232,96,32,0.25)]"
             >
               Ver veículos
             </Link>
@@ -91,7 +95,7 @@ export default async function HomePage() {
         </div>
 
         <div
-          className="absolute right-0 top-1/2 -translate-y-1/2 -translate-x-6 text-white/10 text-[10px] font-semibold uppercase tracking-[0.4em]"
+          className="absolute right-0 top-1/2 -translate-y-1/2 -translate-x-6 text-[#0D0D0D]/20 text-[10px] font-semibold uppercase tracking-[0.4em]"
           style={{ writingMode: 'vertical-rl' }}
         >
           Role para descobrir
@@ -99,7 +103,7 @@ export default async function HomePage() {
       </section>
 
       {/* ── FEATURED CARS ── */}
-      <section className="py-20 bg-[#F6F5F3]">
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-end justify-between mb-10">
             <div>
@@ -107,7 +111,7 @@ export default async function HomePage() {
                 <span className="w-6 h-px bg-[#E86020]" />
                 Estoque Atual
               </p>
-              <h2 className="font-[family-name:var(--font-montserrat)] text-3xl sm:text-4xl font-black text-[#111]">
+              <h2 className="font-[family-name:var(--font-montserrat)] text-3xl sm:text-4xl font-black text-[#0D0D0D]">
                 Destaques do estoque
               </h2>
             </div>
@@ -136,22 +140,22 @@ export default async function HomePage() {
               </div>
             </>
           ) : (
-            <p className="text-[#111]/40 text-sm text-center py-16">Nenhum veículo disponível no momento. Volte em breve!</p>
+            <p className="text-[#0D0D0D]/30 text-sm text-center py-16">Nenhum veículo disponível no momento. Volte em breve!</p>
           )}
         </div>
       </section>
 
       {/* ── DIFFERENTIALS ── */}
-      <section id="diferenciais" className="py-20 bg-[#0D0D0D]">
+      <section id="diferenciais" className="py-20 bg-[#F0EFED]">
         <div className="max-w-7xl mx-auto px-4">
           <p className="text-[#E86020] text-[11px] font-semibold uppercase tracking-[0.25em] mb-4 flex items-center gap-2">
             <span className="w-6 h-px bg-[#E86020]" />
             Por que a VMF
           </p>
-          <h2 className="font-[family-name:var(--font-montserrat)] text-3xl sm:text-4xl font-black text-white max-w-lg mb-3">
+          <h2 className="font-[family-name:var(--font-montserrat)] text-3xl sm:text-4xl font-black text-[#0D0D0D] max-w-lg mb-3">
             Comprar carro não precisa ser uma aposta.
           </h2>
-          <p className="text-white/50 max-w-md mb-14 text-sm leading-relaxed">
+          <p className="text-[#0D0D0D]/50 max-w-md mb-14 text-sm leading-relaxed">
             A gente vende carro do jeito que gostaria de comprar: transparente, sem letra miúda e olhando no olho.
           </p>
 
@@ -173,12 +177,12 @@ export default async function HomePage() {
                 desc: 'Nosso relacionamento não acaba na entrega da chave. A gente continua por perto.',
               },
             ].map(({ Icon, title, desc }) => (
-              <div key={title} className="bg-[#1A1A1A] border border-white/8 rounded-[16px] p-6 hover:border-[#E86020]/30 transition-colors">
+              <div key={title} className="bg-white border border-[#E5E4E2] rounded-[16px] p-6 hover:border-[#E86020]/40 hover:shadow-sm transition-all">
                 <div className="w-10 h-10 rounded-[10px] bg-[#E86020]/10 flex items-center justify-center mb-5">
                   <Icon size={18} className="text-[#E86020]" />
                 </div>
-                <h3 className="font-semibold text-white text-base mb-2">{title}</h3>
-                <p className="text-sm text-white/50 leading-relaxed">{desc}</p>
+                <h3 className="font-semibold text-[#0D0D0D] text-base mb-2">{title}</h3>
+                <p className="text-sm text-[#0D0D0D]/50 leading-relaxed">{desc}</p>
               </div>
             ))}
           </div>
@@ -186,7 +190,7 @@ export default async function HomePage() {
       </section>
 
       {/* ── CONTACT ── */}
-      <section id="contato" className="py-20 bg-[#111]">
+      <section id="contato" className="py-20 bg-[#0D0D0D]">
         <div className="max-w-7xl mx-auto px-4">
           <div className="max-w-xl">
             <p className="text-[#E86020] text-[11px] font-semibold uppercase tracking-[0.25em] mb-4 flex items-center gap-2">
@@ -234,6 +238,6 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-    </>
+    </div>
   )
 }

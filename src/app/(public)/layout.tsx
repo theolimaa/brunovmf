@@ -20,17 +20,17 @@ const InstagramIcon = () => (
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen flex flex-col bg-[#0D0D0D]">
-      <header className="fixed top-0 w-full z-50 bg-[#0D0D0D]/90 backdrop-blur-md border-b border-white/8">
+      <header className="fixed top-0 w-full z-50 bg-[#F5F4F2]/90 backdrop-blur-md border-b border-black/8">
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/">
             <Image src="/logo.png" alt="VMF Auto Store" width={110} height={36} className="object-contain" />
           </Link>
 
           <nav className="hidden md:flex items-center gap-8">
-            <Link href="/" className="text-sm text-white/60 hover:text-white transition-colors">Página Inicial</Link>
-            <Link href="/carros" className="text-sm text-white/60 hover:text-white transition-colors">Nossos Carros</Link>
-            <a href="/#diferenciais" className="text-sm text-white/60 hover:text-white transition-colors">Diferenciais</a>
-            <a href="/#contato" className="text-sm text-white/60 hover:text-white transition-colors">Contato</a>
+            <Link href="/" className="text-sm text-[#0D0D0D]/60 hover:text-[#0D0D0D] transition-colors">Página Inicial</Link>
+            <Link href="/carros" className="text-sm text-[#0D0D0D]/60 hover:text-[#0D0D0D] transition-colors">Nossos Carros</Link>
+            <a href="/#diferenciais" className="text-sm text-[#0D0D0D]/60 hover:text-[#0D0D0D] transition-colors">Diferenciais</a>
+            <a href="/#contato" className="text-sm text-[#0D0D0D]/60 hover:text-[#0D0D0D] transition-colors">Contato</a>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -38,7 +38,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
               href="https://instagram.com/brunocfreitas_"
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:block text-white/50 hover:text-white transition-colors"
+              className="hidden sm:block text-[#0D0D0D]/50 hover:text-[#0D0D0D] transition-colors"
               title="@brunocfreitas_"
             >
               <InstagramIcon />
