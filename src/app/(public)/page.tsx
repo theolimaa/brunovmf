@@ -3,7 +3,7 @@ import { query, sql } from '@/lib/db'
 import { Car } from '@/types'
 import CarCard from '@/components/CarCard'
 import Link from 'next/link'
-import { Star, Eye, Shield, MapPin, Phone, ChevronRight, Clock } from 'lucide-react'
+import { Wrench, Shield, Globe, MapPin, Phone, ChevronRight, Clock } from 'lucide-react'
 
 const WA_URL = 'https://wa.me/5585989000364?text=Olá Bruno! Gostaria de saber mais sobre os veículos.'
 
@@ -73,7 +73,7 @@ export default async function HomePage() {
             que você merece.
           </h1>
           <p className="text-[#0D0D0D]/50 text-base max-w-lg mb-10 leading-relaxed">
-            Seminovos selecionados com critério. Avaliação justa do seu usado e financiamento nos principais bancos. Tudo num só lugar, do jeito certo.
+            A única loja em Fortaleza com Auto Center própria. Laudo cautelar 100% aprovado, avaliação justa do seu usado e financiamento nos principais bancos. Tudo num só lugar, do jeito certo.
           </p>
           <div className="flex flex-wrap items-center gap-4">
             <Link
@@ -153,28 +153,28 @@ export default async function HomePage() {
             Por que a VMF
           </p>
           <h2 className="font-[family-name:var(--font-montserrat)] text-3xl sm:text-4xl font-black text-[#0D0D0D] max-w-lg mb-3">
-            Comprar carro não precisa ser uma aposta.
+            A loja que transforma a compra do seu carro.
           </h2>
           <p className="text-[#0D0D0D]/50 max-w-md mb-14 text-sm leading-relaxed">
-            A gente vende carro do jeito que gostaria de comprar: transparente, sem letra miúda e olhando no olho.
+            A VMF não é mais uma loja de carros. É a única em Fortaleza com estrutura completa pra garantir o que vende.
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             {[
               {
-                Icon: Star,
-                title: 'Curadoria de verdade',
-                desc: 'Não enchemos o pátio por encher. Selecionamos carros que nós mesmos compraríamos.',
-              },
-              {
-                Icon: Eye,
-                title: 'Transparência total',
-                desc: 'Você sabe exatamente o que está levando. Histórico, estado e documentação na mesa.',
+                Icon: Wrench,
+                title: 'Auto Center própria',
+                desc: 'Somos a única loja em Fortaleza com oficina própria. Isso significa garantia real em todos os itens do carro, sem terceiros no meio.',
               },
               {
                 Icon: Shield,
-                title: 'Pós-venda que existe',
-                desc: 'Nosso relacionamento não acaba na entrega da chave. A gente continua por perto.',
+                title: 'Laudo cautelar 100%',
+                desc: 'Todo carro do nosso pátio passa por um checklist completo. Laudo cautelar 100% aprovado antes de qualquer venda.',
+              },
+              {
+                Icon: Globe,
+                title: 'Enviamos pra qualquer lugar',
+                desc: 'Não é de Fortaleza? Sem problema. A VMF envia veículos para qualquer estado do Brasil e até para o exterior.',
               },
             ].map(({ Icon, title, desc }) => (
               <div key={title} className="bg-white border border-[#E5E4E2] rounded-[16px] p-6 hover:border-[#E86020]/40 hover:shadow-sm transition-all">
