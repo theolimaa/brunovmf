@@ -2,8 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Car } from '@/types'
 import { formatCurrency, formatMileage } from '@/lib/utils'
-import { CarStatusBadge } from '@/components/ui/Badge'
-import { Gauge, Calendar, Fuel, Settings2 } from 'lucide-react'
+import { MapPin } from 'lucide-react'
 
 interface CarCardProps {
   car: Car
@@ -11,12 +10,14 @@ interface CarCardProps {
 
 export default function CarCard({ car }: CarCardProps) {
   const primaryPhoto = car.photos?.find(p => p.is_primary) ?? car.photos?.[0]
+  const photoCount = car.photos?.length ?? 0
 
   return (
     <Link href={`/carros/${car.id}`} className="group block">
-      <div className="bg-[#1A1A1A] border border-white/12 rounded-[12px] overflow-hidden hover:border-[#E86020]/40 transition-all duration-200 hover:shadow-[0_2px_24px_rgba(232,96,32,0.12)]">
+      <div className="bg-white border border-[#E5E4E2] rounded-[12px] overflow-hidden hover:shadow-[0_4px_28px_rgba(0,0,0,0.10)] hover:border-[#E86020]/30 transition-all duration-200">
+
         {/* Photo */}
-        <div className="relative aspect-[16/10] overflow-hidden bg-[#111]">
+        <div className="relative aspect-[4/3] overflow-hidden bg-[#F0EFED]">
           {primaryPhoto ? (
             <Image
               src={primaryPhoto.url}
@@ -26,65 +27,78 @@ export default function CarCard({ car }: CarCardProps) {
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
           ) : (
-            <div className="absolute inset-0 flex items-center justify-center text-white/20">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+            <div className="absolute inset-0 flex items-center justify-center">
+              <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-[#0D0D0D]/15">
                 <rect x="1" y="3" width="22" height="16" rx="2" />
                 <circle cx="8.5" cy="17.5" r="2.5" />
                 <circle cx="15.5" cy="17.5" r="2.5" />
               </svg>
             </div>
           )}
-          <div className="absolute top-3 left-3">
-            <CarStatusBadge status={car.status} />
-          </div>
-          {car.photos && car.photos.length > 1 && (
-            <div className="absolute bottom-3 right-3 bg-black/60 text-white/80 text-xs px-2 py-0.5 rounded-full">
-              +{car.photos.length - 1} fotos
+
+          {photoCount > 1 && (
+            <div className="absolute bottom-2 left-2 bg-black/55 backdrop-blur-sm text-white text-[11px] font-medium px-2 py-0.5 rounded-full">
+              1 / {photoCount}
+            </div>
+          )}
+
+          {car.status === 'reserved' && (
+            <div className="absolute top-2 left-2 bg-amber-500 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full">
+              Reservado
             </div>
           )}
         </div>
 
         {/* Info */}
         <div className="p-4">
-          <div className="mb-2">
-            <p className="text-xs text-white/50 uppercase tracking-wider">{car.brand}</p>
-            <h3 className="font-bold text-lg leading-tight text-white">{car.model}</h3>
-          </div>
 
-          <div className="grid grid-cols-2 gap-2 mb-4">
-            <div className="flex items-center gap-1.5 text-xs text-white/60">
-              <Calendar size={13} className="text-[#E86020]" />
-              {car.year}
-            </div>
-            {car.mileage && (
-              <div className="flex items-center gap-1.5 text-xs text-white/60">
-                <Gauge size={13} className="text-[#E86020]" />
-                {formatMileage(car.mileage)}
-              </div>
+          {/* Brand + Model */}
+          <h3 className="font-[family-name:var(--font-montserrat)] font-black text-[#0D0D0D] text-[15px] uppercase leading-tight tracking-wide mb-1">
+            {car.brand} {car.model}
+          </h3>
+          {car.description && (
+            <p className="text-xs text-[#0D0D0D]/45 mb-2 line-clamp-1">{car.description}</p>
+          )}
+
+          {/* Specs row */}
+          <div className="flex items-center gap-2 text-xs text-[#0D0D0D]/50 mb-2 flex-wrap">
+            <span>{car.year}</span>
+            {car.mileage != null && (
+              <>
+                <span className="text-[#0D0D0D]/20">·</span>
+                <span>{formatMileage(car.mileage)}</span>
+              </>
             )}
             {car.fuel && (
-              <div className="flex items-center gap-1.5 text-xs text-white/60">
-                <Fuel size={13} className="text-[#E86020]" />
-                {car.fuel}
-              </div>
+              <>
+                <span className="text-[#0D0D0D]/20">·</span>
+                <span>{car.fuel}</span>
+              </>
             )}
             {car.transmission && (
-              <div className="flex items-center gap-1.5 text-xs text-white/60">
-                <Settings2 size={13} className="text-[#E86020]" />
-                {car.transmission}
-              </div>
+              <>
+                <span className="text-[#0D0D0D]/20">·</span>
+                <span>{car.transmission}</span>
+              </>
             )}
           </div>
 
-          <div className="flex items-center justify-between pt-3 border-t border-white/8">
-            <div>
-              <p className="text-xs text-white/40">Preço</p>
-              <p className="text-xl font-bold text-[#E86020] font-display">{formatCurrency(car.price)}</p>
-            </div>
-            <div className="text-xs text-[#E86020] font-semibold uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">
-              Ver detalhes →
+          {/* Location */}
+          <div className="flex items-center gap-1 text-[11px] text-[#0D0D0D]/35 mb-4">
+            <MapPin size={11} className="text-[#E86020]" />
+            Fortaleza, CE
+          </div>
+
+          {/* Price + Button */}
+          <div className="border-t border-[#F0EFED] pt-3">
+            <p className="font-[family-name:var(--font-montserrat)] font-black text-[#0D0D0D] text-xl mb-3">
+              {formatCurrency(car.price)}
+            </p>
+            <div className="w-full bg-[#0D0D0D] group-hover:bg-[#E86020] text-white text-xs font-semibold uppercase tracking-wider py-2.5 rounded-[8px] text-center transition-colors duration-200">
+              Ver oferta
             </div>
           </div>
+
         </div>
       </div>
     </Link>
