@@ -3,7 +3,7 @@ import { query, sql } from '@/lib/db'
 import { Car } from '@/types'
 import CarCard from '@/components/CarCard'
 import Link from 'next/link'
-import { Star, Eye, Shield, MapPin, Phone, ChevronRight } from 'lucide-react'
+import { Star, Eye, Shield, MapPin, Phone, ChevronRight, Clock } from 'lucide-react'
 
 const WA_URL = 'https://wa.me/5585989000364?text=Olá Bruno! Gostaria de saber mais sobre os veículos.'
 
@@ -192,49 +192,82 @@ export default async function HomePage() {
       {/* ── CONTACT ── */}
       <section id="contato" className="py-20 bg-[#0D0D0D]">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="max-w-xl">
-            <p className="text-[#E86020] text-[11px] font-semibold uppercase tracking-[0.25em] mb-4 flex items-center gap-2">
-              <span className="w-6 h-px bg-[#E86020]" />
-              Vamos conversar
-            </p>
-            <h2 className="font-[family-name:var(--font-montserrat)] text-3xl sm:text-4xl font-black text-white mb-4">
-              Vamos achar o <span className="text-[#E86020]">seu carro?</span>
-            </h2>
-            <p className="text-white/50 text-sm mb-8 leading-relaxed">
-              Chama no WhatsApp e fala com o Bruno. A gente mostra o estoque atualizado, avalia seu usado e tira todas as suas dúvidas na hora.
-            </p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
 
-            <div className="flex flex-wrap gap-3 mb-10">
-              <a
-                href={WA_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2.5 bg-[#25D366] hover:bg-[#1fb85a] text-white font-semibold px-5 py-3 rounded-[10px] transition-colors text-sm"
-              >
-                <WhatsAppIcon />
-                Falar no WhatsApp
-              </a>
-              <a
-                href="https://instagram.com/brunocfreitas_"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2.5 border border-white/20 hover:border-white/50 text-white font-semibold px-5 py-3 rounded-[10px] transition-colors text-sm"
-              >
-                <InstagramIcon />
-                Instagram
-              </a>
+            {/* Left: info */}
+            <div>
+              <p className="text-[#E86020] text-[11px] font-semibold uppercase tracking-[0.25em] mb-4 flex items-center gap-2">
+                <span className="w-6 h-px bg-[#E86020]" />
+                Vamos conversar
+              </p>
+              <h2 className="font-[family-name:var(--font-montserrat)] text-3xl sm:text-4xl font-black text-white mb-4">
+                Vamos achar o <span className="text-[#E86020]">seu carro?</span>
+              </h2>
+              <p className="text-white/50 text-sm mb-8 leading-relaxed">
+                Chama no WhatsApp e fala com o Bruno. A gente mostra o estoque atualizado, avalia seu usado e tira todas as suas dúvidas na hora.
+              </p>
+
+              <div className="flex flex-wrap gap-3 mb-10">
+                <a
+                  href={WA_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2.5 bg-[#25D366] hover:bg-[#1fb85a] text-white font-semibold px-5 py-3 rounded-[10px] transition-colors text-sm"
+                >
+                  <WhatsAppIcon />
+                  Falar no WhatsApp
+                </a>
+                <a
+                  href="https://instagram.com/brunocfreitas_"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2.5 border border-white/20 hover:border-white/50 text-white font-semibold px-5 py-3 rounded-[10px] transition-colors text-sm"
+                >
+                  <InstagramIcon />
+                  Instagram
+                </a>
+              </div>
+
+              <div className="space-y-5">
+                <div className="flex items-start gap-3 text-sm text-white/50">
+                  <MapPin size={15} className="text-[#E86020] shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-white/30 text-[10px] uppercase tracking-wider mb-1">Endereço</p>
+                    Av. Coronel Miguel Dias, 555 — Lojas 05 e 07<br />
+                    Guararapes, Fortaleza – CE
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 text-sm text-white/50">
+                  <Phone size={15} className="text-[#E86020] shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-white/30 text-[10px] uppercase tracking-wider mb-1">Telefone / WhatsApp</p>
+                    (85) 9 8900-0364
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 text-sm text-white/50">
+                  <Clock size={15} className="text-[#E86020] shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-white/30 text-[10px] uppercase tracking-wider mb-1">Horário</p>
+                    Segunda a Sexta, 9h às 18h<br />
+                    Sábado, 9h às 13h
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div className="space-y-3">
-              <div className="flex items-center gap-3 text-sm text-white/50">
-                <MapPin size={15} className="text-[#E86020] shrink-0" />
-                Fortaleza, CE
-              </div>
-              <div className="flex items-center gap-3 text-sm text-white/50">
-                <Phone size={15} className="text-[#E86020] shrink-0" />
-                (85) 9 8900-0364
-              </div>
+            {/* Right: Google Maps */}
+            <div className="rounded-[16px] overflow-hidden h-[360px] lg:h-full min-h-[400px]">
+              <iframe
+                src="https://maps.google.com/maps?q=Av.+Coronel+Miguel+Dias,+555,+Guararapes,+Fortaleza,+CE&output=embed"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
             </div>
+
           </div>
         </div>
       </section>
