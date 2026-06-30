@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
     await sql`UPDATE cars SET status = 'sold' WHERE id = ${car_id}`
   }
   if (lead_id) {
-    await sql`UPDATE leads SET status = 'ganho' WHERE id = ${lead_id}`
+    await sql`UPDATE leads SET status = 'vendeu' WHERE id = ${lead_id}`
   }
 
   return NextResponse.json(sale, { status: 201 })

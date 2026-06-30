@@ -9,11 +9,12 @@ export async function PATCH(
   await requireAdmin()
   const { id } = await params
   const body = await request.json()
-  const { status, notes } = body
 
   const updates: string[] = []
   const values: (string | null)[] = []
   let idx = 1
+
+  const { status, notes, contacted_at, visit_date, visit_time, came_to_store_at } = body
 
   if (status !== undefined) {
     updates.push(`status = $${idx++}`)
@@ -22,6 +23,22 @@ export async function PATCH(
   if (notes !== undefined) {
     updates.push(`notes = $${idx++}`)
     values.push(notes)
+  }
+  if (contacted_at !== undefined) {
+    updates.push(`contacted_at = $${idx++}`)
+    values.push(contacted_at)
+  }
+  if (visit_date !== undefined) {
+    updates.push(`visit_date = $${idx++}`)
+    values.push(visit_date)
+  }
+  if (visit_time !== undefined) {
+    updates.push(`visit_time = $${idx++}`)
+    values.push(visit_time)
+  }
+  if (came_to_store_at !== undefined) {
+    updates.push(`came_to_store_at = $${idx++}`)
+    values.push(came_to_store_at)
   }
 
   if (updates.length === 0) {

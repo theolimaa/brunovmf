@@ -13,13 +13,173 @@ import {
 } from '@dnd-kit/core'
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { Lead, LeadStatus, LEAD_STATUS_COLORS, LEAD_STATUS_LABELS } from '@/types'
+import { Lead, LeadStatus, LEAD_STATUS_COLORS, LEAD_STATUS_LABELS, Car } from '@/types'
 import { formatCurrency } from '@/lib/utils'
-import { LeadStatusBadge } from './ui/Badge'
-import { Phone, Car, MessageSquare, GripVertical, ExternalLink } from 'lucide-react'
+import { Phone, Car as CarIcon, GripVertical, ExternalLink, Plus, X, ChevronLeft, ChevronRight } from 'lucide-react'
 import toast from 'react-hot-toast'
 
-const COLUMNS: LeadStatus[] = ['novo', 'contatado', 'negociando', 'ganho', 'perdido']
+const COLUMNS: LeadStatus[] = ['lead_novo', 'visita_marcada', 'negociando', 'ligar_de_volta', 'vendeu', 'nao_comprou']
+
+const MONTH_NAMES = [
+  'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+  'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',
+]
+
+// ─── Modal de Novo Cliente ───────────────────────────────────────────────────
+
+interface NovoClienteModalProps {
+  cars: Car[]
+  onClose: () => void
+  onSave: (lead: Lead) => void
+}
+
+function NovoClienteModal({ cars, onClose, onSave }: NovoClienteModalProps) {
+  const [loading, setLoading] = useState(false)
+  const [form, setForm] = useState({
+    name: '',
+    phone: '',
+    status: 'lead_novo' as LeadStatus,
+    car_id: '',
+    notes: '',
+    contacted_at: '',
+    visit_date: '',
+    visit_time: '',
+    came_to_store_at: '',
+  })
+
+  function update(field: string, value: string) {
+    setForm(f => ({ ...f, [field]: value }))
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!form.name || !form.phone) {
+      toast.error('Nome e telefone são obrigatórios')
+      return
+    }
+    setLoading(true)
+    try {
+      const res = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.name,
+          phone: form.phone,
+          status: form.status,
+          car_id: form.car_id || null,
+          notes: form.notes || null,
+          contacted_at: form.contacted_at || null,
+          visit_date: form.visit_date || null,
+          visit_time: form.visit_time || null,
+          came_to_store_at: form.came_to_store_at || null,
+        }),
+      })
+      if (!res.ok) throw new Error()
+      const lead = await res.json()
+      const car = cars.find(c => c.id === form.car_id) ?? null
+      onSave({ ...lead, car })
+      toast.success('Cliente cadastrado!')
+      onClose()
+    } catch {
+      toast.error('Erro ao salvar cliente')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const inputClass = 'w-full bg-[#0D0D0D] border border-white/10 rounded-[8px] px-3 py-2 text-sm text-white placeholder-white/30 focus:outline-none focus:border-[#E86020]/60'
+  const labelClass = 'block text-xs text-white/50 mb-1'
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+      <div className="bg-[#1A1A1A] border border-white/10 rounded-[16px] w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between p-5 border-b border-white/8">
+          <h2 className="text-base font-semibold text-white">Novo cliente</h2>
+          <button onClick={onClose} className="text-white/40 hover:text-white transition-colors">
+            <X size={18} />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-5 space-y-4">
+          <div>
+            <label className={labelClass}>Nome do cliente *</label>
+            <input className={inputClass} placeholder="Nome do cliente" value={form.name} onChange={e => update('name', e.target.value)} required />
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className={labelClass}>Telefone *</label>
+              <input className={inputClass} placeholder="(85) 99999-0000" value={form.phone} onChange={e => update('phone', e.target.value)} required />
+            </div>
+            <div>
+              <label className={labelClass}>Status</label>
+              <select className={inputClass} value={form.status} onChange={e => update('status', e.target.value as LeadStatus)}>
+                {COLUMNS.map(s => (
+                  <option key={s} value={s}>{LEAD_STATUS_LABELS[s]}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label className={labelClass}>Carro de interesse</label>
+            <select className={inputClass} value={form.car_id} onChange={e => update('car_id', e.target.value)}>
+              <option value="">Selecionar carro...</option>
+              {cars.filter(c => c.status !== 'sold').map(c => (
+                <option key={c.id} value={c.id}>
+                  {c.brand} {c.model} {c.year} — {formatCurrency(c.price)}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className={labelClass}>Observações da negociação</label>
+            <textarea
+              className={`${inputClass} resize-none`}
+              rows={3}
+              placeholder="Observações da negociação..."
+              value={form.notes}
+              onChange={e => update('notes', e.target.value)}
+            />
+          </div>
+
+          <div className="border-t border-white/8 pt-4">
+            <p className="text-xs text-white/40 mb-3 uppercase tracking-wider">Datas (opcional)</p>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelClass}>Conversamos em</label>
+                <input type="date" className={inputClass} value={form.contacted_at} onChange={e => update('contacted_at', e.target.value)} />
+              </div>
+              <div>
+                <label className={labelClass}>Visita agendada para</label>
+                <input type="date" className={inputClass} value={form.visit_date} onChange={e => update('visit_date', e.target.value)} />
+              </div>
+              <div>
+                <label className={labelClass}>Horário da visita</label>
+                <input type="time" className={inputClass} value={form.visit_time} onChange={e => update('visit_time', e.target.value)} />
+              </div>
+              <div>
+                <label className={labelClass}>Veio à loja em</label>
+                <input type="date" className={inputClass} value={form.came_to_store_at} onChange={e => update('came_to_store_at', e.target.value)} />
+              </div>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-[#0D0D0D] hover:bg-[#E86020] text-white text-sm font-semibold py-3 rounded-[10px] transition-colors disabled:opacity-50 mt-2"
+          >
+            {loading ? 'Salvando...' : 'Salvar cliente'}
+          </button>
+        </form>
+      </div>
+    </div>
+  )
+}
+
+// ─── Lead Card ───────────────────────────────────────────────────────────────
 
 function LeadCardInner({ lead, isDragging }: { lead: Lead; isDragging?: boolean }) {
   return (
@@ -41,20 +201,24 @@ function LeadCardInner({ lead, isDragging }: { lead: Lead; isDragging?: boolean 
 
       {lead.car && (
         <div className="flex items-center gap-1.5 text-xs text-white/50 mb-2 bg-white/4 rounded-[6px] px-2 py-1">
-          <Car size={11} className="text-[#E86020]" />
+          <CarIcon size={11} className="text-[#E86020]" />
           <span className="truncate">{lead.car.brand} {lead.car.model} {lead.car.year}</span>
           <span className="ml-auto text-[#E86020] font-medium whitespace-nowrap">{formatCurrency(lead.car.price)}</span>
         </div>
       )}
 
-      {lead.message && (
-        <p className="text-xs text-white/40 flex items-start gap-1.5 line-clamp-2">
-          <MessageSquare size={11} className="mt-0.5 flex-shrink-0" />
-          {lead.message}
+      {lead.visit_date && (
+        <p className="text-xs text-[#F59E0B] mb-1.5">
+          Visita: {new Date(lead.visit_date + 'T12:00').toLocaleDateString('pt-BR')}
+          {lead.visit_time && ` às ${lead.visit_time.slice(0, 5)}`}
         </p>
       )}
 
-      <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/6">
+      {lead.notes && (
+        <p className="text-xs text-white/40 line-clamp-2 mb-2">{lead.notes}</p>
+      )}
+
+      <div className="flex items-center justify-between pt-2 border-t border-white/6">
         <span className="text-[10px] text-white/30">
           {new Date(lead.created_at).toLocaleDateString('pt-BR')}
         </span>
@@ -79,29 +243,17 @@ function SortableLeadCard({ lead }: { lead: Lead }) {
     data: { lead },
   })
 
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  }
-
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <div ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition }} {...attributes} {...listeners}>
       <LeadCardInner lead={lead} isDragging={isDragging} />
     </div>
   )
 }
 
-function KanbanColumn({
-  status,
-  leads,
-}: {
-  status: LeadStatus
-  leads: Lead[]
-}) {
+function KanbanColumn({ status, leads }: { status: LeadStatus; leads: Lead[] }) {
   const color = LEAD_STATUS_COLORS[status]
-
   return (
-    <div className="flex flex-col bg-[#1A1A1A] rounded-[12px] border border-white/8 min-w-[260px] w-[260px] flex-shrink-0">
+    <div className="flex flex-col bg-[#1A1A1A] rounded-[12px] border border-white/8 min-w-[240px] w-[240px] flex-shrink-0">
       <div className="px-3 py-3 border-b border-white/8 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full" style={{ backgroundColor: color }} />
@@ -109,21 +261,34 @@ function KanbanColumn({
         </div>
         <span className="text-xs text-white/40 bg-white/8 rounded-full px-2 py-0.5">{leads.length}</span>
       </div>
-
       <SortableContext items={leads.map(l => l.id)} strategy={verticalListSortingStrategy}>
-        <div className="flex flex-col gap-2 p-2 min-h-[100px] flex-1">
+        <div className="flex flex-col gap-2 p-2 min-h-[80px] flex-1">
           {leads.map(lead => (
             <SortableLeadCard key={lead.id} lead={lead} />
           ))}
+          {leads.length === 0 && (
+            <p className="text-[11px] text-white/20 text-center py-4">arraste aqui</p>
+          )}
         </div>
       </SortableContext>
     </div>
   )
 }
 
-export default function KanbanBoard({ initialLeads }: { initialLeads: Lead[] }) {
+// ─── KanbanBoard ─────────────────────────────────────────────────────────────
+
+interface KanbanBoardProps {
+  initialLeads: Lead[]
+  cars: Car[]
+}
+
+export default function KanbanBoard({ initialLeads, cars }: KanbanBoardProps) {
+  const now = new Date()
+  const [month, setMonth] = useState(now.getMonth())
+  const [year, setYear]   = useState(now.getFullYear())
   const [leads, setLeads] = useState<Lead[]>(initialLeads)
   const [activeId, setActiveId] = useState<string | null>(null)
+  const [showModal, setShowModal] = useState(false)
 
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }))
 
@@ -134,6 +299,15 @@ export default function KanbanBoard({ initialLeads }: { initialLeads: Lead[] }) 
 
   const activeLead = leads.find(l => l.id === activeId)
 
+  function prevMonth() {
+    if (month === 0) { setMonth(11); setYear(y => y - 1) }
+    else setMonth(m => m - 1)
+  }
+  function nextMonth() {
+    if (month === 11) { setMonth(0); setYear(y => y + 1) }
+    else setMonth(m => m + 1)
+  }
+
   function handleDragStart(event: DragStartEvent) {
     setActiveId(event.active.id as string)
   }
@@ -141,23 +315,19 @@ export default function KanbanBoard({ initialLeads }: { initialLeads: Lead[] }) 
   async function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event
     setActiveId(null)
-
     if (!over) return
 
     const activeLeadId = active.id as string
     const overId = over.id as string
-
     const targetColumn = COLUMNS.includes(overId as LeadStatus)
       ? (overId as LeadStatus)
       : leads.find(l => l.id === overId)?.status
 
     if (!targetColumn) return
-
     const lead = leads.find(l => l.id === activeLeadId)
     if (!lead || lead.status === targetColumn) return
 
     setLeads(prev => prev.map(l => l.id === activeLeadId ? { ...l, status: targetColumn } : l))
-
     try {
       await fetch(`/api/leads/${activeLeadId}`, {
         method: 'PATCH',
@@ -166,36 +336,70 @@ export default function KanbanBoard({ initialLeads }: { initialLeads: Lead[] }) 
       })
     } catch {
       setLeads(prev => prev.map(l => l.id === activeLeadId ? { ...l, status: lead.status } : l))
-      toast.error('Erro ao atualizar lead')
+      toast.error('Erro ao atualizar cliente')
     }
   }
 
   function handleDragOver(event: DragOverEvent) {
     const { active, over } = event
     if (!over) return
-
     const activeLeadId = active.id as string
     const overId = over.id as string
-
     const targetColumn = COLUMNS.includes(overId as LeadStatus)
       ? (overId as LeadStatus)
       : leads.find(l => l.id === overId)?.status
-
     if (!targetColumn) return
-
     setLeads(prev => prev.map(l => l.id === activeLeadId ? { ...l, status: targetColumn } : l))
   }
 
+  function handleNewLead(lead: Lead) {
+    setLeads(prev => [lead, ...prev])
+  }
+
   return (
-    <DndContext sensors={sensors} onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
-      <div className="flex gap-4 overflow-x-auto pb-4">
-        {COLUMNS.map(status => (
-          <KanbanColumn key={status} status={status} leads={leadsByStatus(status)} />
-        ))}
+    <>
+      {showModal && (
+        <NovoClienteModal
+          cars={cars}
+          onClose={() => setShowModal(false)}
+          onSave={handleNewLead}
+        />
+      )}
+
+      {/* Header: month selector + new button */}
+      <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center gap-2">
+          <button onClick={prevMonth} className="p-1.5 rounded-[6px] text-white/40 hover:text-white hover:bg-white/6 transition-colors">
+            <ChevronLeft size={16} />
+          </button>
+          <span className="text-sm font-medium text-white min-w-[130px] text-center">
+            {MONTH_NAMES[month]} {year}
+          </span>
+          <button onClick={nextMonth} className="p-1.5 rounded-[6px] text-white/40 hover:text-white hover:bg-white/6 transition-colors">
+            <ChevronRight size={16} />
+          </button>
+        </div>
+        <button
+          onClick={() => setShowModal(true)}
+          className="flex items-center gap-2 bg-[#E86020] hover:bg-[#d4551a] text-white text-xs font-semibold uppercase tracking-wider px-4 py-2.5 rounded-[8px] transition-colors"
+        >
+          <Plus size={14} />
+          Cliente
+        </button>
       </div>
-      <DragOverlay>
-        {activeLead && <LeadCardInner lead={activeLead} isDragging />}
-      </DragOverlay>
-    </DndContext>
+
+      <p className="text-xs text-white/40 mb-4">Arraste os cards pra mudar de etapa ou use &quot;Mover&quot;.</p>
+
+      <DndContext sensors={sensors} onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
+        <div className="flex gap-3 overflow-x-auto pb-4">
+          {COLUMNS.map(status => (
+            <KanbanColumn key={status} status={status} leads={leadsByStatus(status)} />
+          ))}
+        </div>
+        <DragOverlay>
+          {activeLead && <LeadCardInner lead={activeLead} isDragging />}
+        </DragOverlay>
+      </DndContext>
+    </>
   )
 }

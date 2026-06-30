@@ -32,7 +32,8 @@ export async function PUT(
   await requireAdmin()
   const { id } = await params
   const body = await request.json()
-  const { brand, model, year, price, cost_price, mileage, color, fuel, transmission, description, status } = body
+  const { brand, model, year, price, cost_price, discount_max, mileage, color, fuel, transmission,
+          category, doors, is_premium, acquisition_date, optionals, description, status } = body
 
   const [car] = await sql`
     UPDATE cars SET
@@ -41,16 +42,37 @@ export async function PUT(
       year = ${year},
       price = ${price},
       cost_price = ${cost_price ?? null},
+      discount_max = ${discount_max ?? null},
       mileage = ${mileage ?? null},
       color = ${color ?? null},
       fuel = ${fuel ?? null},
       transmission = ${transmission ?? null},
+      category = ${category ?? null},
+      doors = ${doors ?? null},
+      is_premium = ${is_premium ?? false},
+      acquisition_date = ${acquisition_date ?? null},
+      optionals = ${optionals ?? null},
       description = ${description ?? null},
       status = ${status ?? 'available'}
     WHERE id = ${id}
     RETURNING *
   `
 
+  if (!car) return NextResponse.json({ error: 'Carro não encontrado' }, { status: 404 })
+  return NextResponse.json(car)
+}
+
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  await requireAdmin()
+  const { id } = await params
+  const { status } = await request.json()
+
+  const [car] = await sql`
+    UPDATE cars SET status = ${status} WHERE id = ${id} RETURNING *
+  `
   if (!car) return NextResponse.json({ error: 'Carro não encontrado' }, { status: 404 })
   return NextResponse.json(car)
 }

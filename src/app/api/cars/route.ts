@@ -53,16 +53,20 @@ export async function POST(request: NextRequest) {
   await requireAdmin()
 
   const body = await request.json()
-  const { brand, model, year, price, cost_price, mileage, color, fuel, transmission, description, status } = body
+  const { brand, model, year, price, cost_price, discount_max, mileage, color, fuel, transmission,
+          category, doors, is_premium, acquisition_date, optionals, description, status } = body
 
   if (!brand || !model || !year || !price) {
     return NextResponse.json({ error: 'Campos obrigatórios faltando' }, { status: 400 })
   }
 
   const [car] = await sql`
-    INSERT INTO cars (brand, model, year, price, cost_price, mileage, color, fuel, transmission, description, status)
-    VALUES (${brand}, ${model}, ${year}, ${price}, ${cost_price ?? null}, ${mileage ?? null},
-            ${color ?? null}, ${fuel ?? null}, ${transmission ?? null}, ${description ?? null},
+    INSERT INTO cars (brand, model, year, price, cost_price, discount_max, mileage, color, fuel,
+                      transmission, category, doors, is_premium, acquisition_date, optionals, description, status)
+    VALUES (${brand}, ${model}, ${year}, ${price}, ${cost_price ?? null}, ${discount_max ?? null},
+            ${mileage ?? null}, ${color ?? null}, ${fuel ?? null}, ${transmission ?? null},
+            ${category ?? null}, ${doors ?? null}, ${is_premium ?? false},
+            ${acquisition_date ?? null}, ${optionals ?? null}, ${description ?? null},
             ${status ?? 'available'})
     RETURNING *
   `

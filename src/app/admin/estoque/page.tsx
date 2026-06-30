@@ -111,11 +111,10 @@ export default async function EstoquePage() {
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2 justify-end">
                         <Link
-                          href={`/carros/${car.id}`}
-                          target="_blank"
+                          href={`/admin/estoque/${car.id}`}
                           className="text-xs text-white/40 hover:text-white transition-colors"
                         >
-                          Ver
+                          Detalhe
                         </Link>
                         <Link
                           href={`/admin/estoque/${car.id}/editar`}

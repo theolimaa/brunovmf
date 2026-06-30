@@ -14,15 +14,19 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   const body = await request.json()
-  const { car_id, name, phone, message } = body
+  const { car_id, name, phone, message, status, notes, contacted_at, visit_date, visit_time, came_to_store_at } = body
 
   if (!name || !phone) {
     return NextResponse.json({ error: 'Nome e telefone são obrigatórios' }, { status: 400 })
   }
 
   const [lead] = await sql`
-    INSERT INTO leads (car_id, name, phone, message)
-    VALUES (${car_id ?? null}, ${name}, ${phone}, ${message ?? null})
+    INSERT INTO leads (car_id, name, phone, message, status, notes, contacted_at, visit_date, visit_time, came_to_store_at)
+    VALUES (
+      ${car_id ?? null}, ${name}, ${phone}, ${message ?? null},
+      ${status ?? 'lead_novo'}, ${notes ?? null},
+      ${contacted_at ?? null}, ${visit_date ?? null}, ${visit_time ?? null}, ${came_to_store_at ?? null}
+    )
     RETURNING *
   `
 
