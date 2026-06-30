@@ -189,6 +189,36 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ── QUEM É O BRUNO ── */}
+      <section id="sobre" className="py-20 bg-[#0D0D0D]">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="max-w-2xl">
+            <p className="text-[#E86020] text-[11px] font-semibold uppercase tracking-[0.25em] mb-4 flex items-center gap-2">
+              <span className="w-6 h-px bg-[#E86020]" />
+              Quem é o Bruno
+            </p>
+
+            <div className="flex items-center gap-5 mb-7">
+              <div className="w-16 h-16 rounded-full bg-[#E86020]/10 border border-[#E86020]/30 flex items-center justify-center shrink-0">
+                <span className="font-[family-name:var(--font-montserrat)] font-black text-[#E86020] text-xl">BC</span>
+              </div>
+              <div>
+                <h2 className="font-[family-name:var(--font-montserrat)] text-3xl sm:text-4xl font-black text-white">
+                  Bruno Cavalcante
+                </h2>
+                <p className="text-white/40 text-sm mt-1">Gerente da VMF Auto Store</p>
+              </div>
+            </div>
+
+            <p className="text-white/60 text-base leading-relaxed">
+              Trabalho com carro todo dia, então sei bem o que pesa na hora de comprar.
+              Por isso aqui ninguém empurra nada: <span className="text-[#E86020] font-semibold">mostro o carro do jeito que ele é</span>, com laudo, checklist e Auto Center pra provar que tô falando a verdade.
+              Se servir pra você, simbora. Se não servir, sou eu mesmo que vou falar.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* ── CONTACT ── */}
       <section id="contato" className="py-20 bg-[#0D0D0D]">
         <div className="max-w-7xl mx-auto px-4">

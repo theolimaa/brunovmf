@@ -30,6 +30,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             <Link href="/" className="text-sm text-[#0D0D0D]/60 hover:text-[#0D0D0D] transition-colors">Página Inicial</Link>
             <Link href="/carros" className="text-sm text-[#0D0D0D]/60 hover:text-[#0D0D0D] transition-colors">Nossos Carros</Link>
             <a href="/#diferenciais" className="text-sm text-[#0D0D0D]/60 hover:text-[#0D0D0D] transition-colors">Diferenciais</a>
+            <a href="/#sobre" className="text-sm text-[#0D0D0D]/60 hover:text-[#0D0D0D] transition-colors">Quem é o Bruno</a>
             <a href="/#contato" className="text-sm text-[#0D0D0D]/60 hover:text-[#0D0D0D] transition-colors">Contato</a>
           </nav>
 
@@ -70,7 +71,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             <div>
               <p className="text-xs text-white/30 uppercase tracking-wider mb-4">Navegação</p>
               <ul className="space-y-2">
-                {[['Página Inicial', '/'], ['Nossos Carros', '/carros'], ['Diferenciais', '/#diferenciais'], ['Contato', '/#contato']].map(([label, href]) => (
+                {[['Página Inicial', '/'], ['Nossos Carros', '/carros'], ['Diferenciais', '/#diferenciais'], ['Quem é o Bruno', '/#sobre'], ['Contato', '/#contato']].map(([label, href]) => (
                   <li key={label}>
                     <a href={href} className="text-sm text-white/50 hover:text-white transition-colors">{label}</a>
                   </li>
@@ -89,7 +90,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
           </div>
           <div className="border-t border-white/8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
             <p className="text-xs text-white/25">
-              © {new Date().getFullYear()} Bruno Cavalcante Freitas — VMF Auto Store. Todos os direitos reservados.
+              © {new Date().getFullYear()} Bruno Cavalcante Freitas, VMF Auto Store. Todos os direitos reservados.
             </p>
             <div className="flex items-center gap-4">
               <a href="https://instagram.com/brunocfreitas_" target="_blank" rel="noopener noreferrer" className="text-white/30 hover:text-white transition-colors">
