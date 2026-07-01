@@ -1,5 +1,6 @@
 export type CarStatus = 'available' | 'reserved' | 'sold'
 export type LeadStatus = 'lead_novo' | 'visita_marcada' | 'negociando' | 'ligar_de_volta' | 'vendeu' | 'nao_comprou'
+export type LeadSource = 'manual' | 'site' | 'trafego_pago'
 export type FuelType = 'Gasolina' | 'Flex' | 'Diesel' | 'Elétrico' | 'Híbrido'
 export type TransmissionType = 'Manual' | 'Automático' | 'CVT' | 'Automatizado'
 export type CarCategory = 'Sedan' | 'SUV' | 'Hatch' | 'Pickup' | 'Minivan' | 'Conversível' | 'Coupé' | 'Utilitário' | 'Van'
@@ -41,10 +42,14 @@ export interface Lead {
   id: string
   car_id?: string | null
   name: string
-  phone: string
+  phone: string | null
   message?: string | null
   status: LeadStatus
   notes?: string | null
+  source: LeadSource
+  utm_source?: string | null
+  utm_medium?: string | null
+  utm_campaign?: string | null
   contacted_at?: string | null
   visit_date?: string | null
   visit_time?: string | null
@@ -83,6 +88,12 @@ export const LEAD_STATUS_LABELS: Record<LeadStatus, string> = {
   ligar_de_volta: 'Ligar de volta',
   vendeu:         'Vendeu',
   nao_comprou:    'Não comprou',
+}
+
+export const LEAD_SOURCE_LABELS: Record<LeadSource, string> = {
+  manual:       'Cadastro manual',
+  site:         'Site',
+  trafego_pago: 'Tráfego pago',
 }
 
 export const LEAD_STATUS_COLORS: Record<LeadStatus, string> = {

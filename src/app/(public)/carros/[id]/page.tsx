@@ -4,8 +4,9 @@ import { sql } from '@/lib/db'
 import { Car } from '@/types'
 import CarGallery from '@/components/CarGallery'
 import { CarStatusBadge } from '@/components/ui/Badge'
+import WhatsAppCtaButton from '@/components/WhatsAppCtaButton'
 import { buildWhatsAppUrl, formatCurrency, formatMileage } from '@/lib/utils'
-import { Calendar, Fuel, Gauge, MessageCircle, Settings2, Palette } from 'lucide-react'
+import { Calendar, Fuel, Gauge, Settings2, Palette } from 'lucide-react'
 
 async function getCar(id: string): Promise<Car | null> {
   await connection()
@@ -89,15 +90,7 @@ export default async function CarDetailPage({ params }: PageProps) {
 
             {/* WhatsApp CTA */}
             {car.status !== 'sold' && (
-              <a
-                href={whatsAppUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full flex items-center justify-center gap-3 bg-[#E86020] hover:bg-[#d4551a] text-white font-semibold text-sm uppercase tracking-wider py-4 px-6 rounded-[10px] transition-colors shadow-[0_2px_24px_rgba(232,96,32,0.25)]"
-              >
-                <MessageCircle size={18} />
-                Tenho interesse — falar com Bruno
-              </a>
+              <WhatsAppCtaButton carId={car.id} whatsAppUrl={whatsAppUrl} />
             )}
 
             <p className="text-center text-xs text-white/30 mt-3">

@@ -14,7 +14,7 @@ import {
 } from '@dnd-kit/core'
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { Lead, LeadStatus, LEAD_STATUS_COLORS, LEAD_STATUS_LABELS, Car } from '@/types'
+import { Lead, LeadStatus, LEAD_STATUS_COLORS, LEAD_STATUS_LABELS, LEAD_SOURCE_LABELS, Car } from '@/types'
 import { formatCurrency } from '@/lib/utils'
 import { Phone, Car as CarIcon, GripVertical, ExternalLink, Plus, X, ChevronLeft, ChevronRight, Pencil, Trash2 } from 'lucide-react'
 import toast from 'react-hot-toast'
@@ -195,7 +195,7 @@ function EditarClienteModal({ lead, cars, onClose, onSave, onDelete }: EditarCli
   const [deleting, setDeleting] = useState(false)
   const [form, setForm] = useState({
     name: lead.name,
-    phone: lead.phone,
+    phone: lead.phone ?? '',
     status: lead.status,
     car_id: lead.car?.id ?? '',
     notes: lead.notes ?? '',
@@ -383,14 +383,18 @@ function LeadCardInner({ lead, isDragging, dragListeners, onEdit }: LeadCardInne
         </div>
         <div className="min-w-0 flex-1">
           <p className="font-semibold text-sm text-white truncate">{lead.name}</p>
-          <a
-            href={`tel:${lead.phone}`}
-            className="text-xs text-white/50 hover:text-[#E86020] flex items-center gap-1 mt-0.5"
-            onClick={e => e.stopPropagation()}
-          >
-            <Phone size={10} />
-            {lead.phone}
-          </a>
+          {lead.phone ? (
+            <a
+              href={`tel:${lead.phone}`}
+              className="text-xs text-white/50 hover:text-[#E86020] flex items-center gap-1 mt-0.5"
+              onClick={e => e.stopPropagation()}
+            >
+              <Phone size={10} />
+              {lead.phone}
+            </a>
+          ) : (
+            <p className="text-xs text-white/30 mt-0.5">Aguardando contato</p>
+          )}
         </div>
         {onEdit && (
           <button
@@ -410,6 +414,17 @@ function LeadCardInner({ lead, isDragging, dragListeners, onEdit }: LeadCardInne
         </div>
       )}
 
+      {lead.source !== 'manual' && (
+        <div className="flex items-center gap-1 mb-2">
+          <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-[4px] ${lead.source === 'trafego_pago' ? 'bg-[#E86020]/15 text-[#E86020]' : 'bg-white/8 text-white/50'}`}>
+            {LEAD_SOURCE_LABELS[lead.source]}
+          </span>
+          {lead.utm_campaign && (
+            <span className="text-[10px] text-white/30 truncate">{lead.utm_campaign}</span>
+          )}
+        </div>
+      )}
+
       {lead.visit_date && (
         <p className="text-xs text-[#F59E0B] mb-1.5">
           Visita: {new Date(lead.visit_date + 'T12:00').toLocaleDateString('pt-BR')}
@@ -425,16 +440,18 @@ function LeadCardInner({ lead, isDragging, dragListeners, onEdit }: LeadCardInne
         <span className="text-[10px] text-white/30">
           {new Date(lead.created_at).toLocaleDateString('pt-BR')}
         </span>
-        <a
-          href={`https://wa.me/55${lead.phone.replace(/\D/g, '')}?text=Olá ${lead.name}!`}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={e => e.stopPropagation()}
-          className="text-[10px] text-green-400 hover:text-green-300 flex items-center gap-1"
-        >
-          <ExternalLink size={10} />
-          WhatsApp
-        </a>
+        {lead.phone && (
+          <a
+            href={`https://wa.me/55${lead.phone.replace(/\D/g, '')}?text=Olá ${lead.name}!`}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={e => e.stopPropagation()}
+            className="text-[10px] text-green-400 hover:text-green-300 flex items-center gap-1"
+          >
+            <ExternalLink size={10} />
+            WhatsApp
+          </a>
+        )}
       </div>
     </div>
   )

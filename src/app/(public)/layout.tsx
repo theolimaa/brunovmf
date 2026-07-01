@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import MobileMenu from '@/components/MobileMenu'
+import UtmCapture from '@/components/UtmCapture'
 
 const WA_URL = 'https://wa.me/5585989000364?text=Olá Bruno! Gostaria de saber mais sobre os veículos.'
 
@@ -21,6 +22,7 @@ const InstagramIcon = () => (
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen flex flex-col bg-[#0D0D0D]">
+      <UtmCapture />
       <header className="fixed top-0 w-full z-50 bg-[#F5F4F2]/50 backdrop-blur-md border-b border-black/8">
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/">
