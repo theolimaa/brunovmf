@@ -55,7 +55,7 @@ export default async function HomePage() {
         {/* Fachada VMF como background */}
         <div className="absolute inset-0">
           <img
-            src="/fachada-vmf.webp"
+            src="/fachada-vmf.jpg"
             alt="VMF Auto Store"
             className="w-full h-full object-cover object-center"
           />
