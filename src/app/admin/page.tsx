@@ -4,25 +4,63 @@ import { formatCurrency, formatMileage } from '@/lib/utils'
 import { Car, TrendingUp, Users, DollarSign, Package, AlertCircle } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
+import PeriodFilter from './PeriodFilter'
 
-async function getDashboardData() {
+type PeriodMode =
+  | { type: 'current' }
+  | { type: 'year'; year: number }
+  | { type: 'month'; year: number; month: number }
+  | { type: 'all' }
+
+async function getDashboardData(period: PeriodMode) {
   await connection()
 
-  const [stockRows, leadsRows, salesRows, oldestCars, mktValue] = await Promise.all([
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let salesRows: any[]
+  if (period.type === 'all') {
+    salesRows = await sql`
+      SELECT COUNT(*) as count,
+        COALESCE(SUM(sale_price), 0)              as revenue,
+        COALESCE(SUM(sale_price - cost_price), 0) as margin,
+        COALESCE(SUM(cost_price), 0)              as invested
+      FROM sales
+    `
+  } else if (period.type === 'year') {
+    salesRows = await sql`
+      SELECT COUNT(*) as count,
+        COALESCE(SUM(sale_price), 0)              as revenue,
+        COALESCE(SUM(sale_price - cost_price), 0) as margin,
+        COALESCE(SUM(cost_price), 0)              as invested
+      FROM sales
+      WHERE EXTRACT(YEAR FROM sale_date) = ${period.year}
+    `
+  } else if (period.type === 'month') {
+    salesRows = await sql`
+      SELECT COUNT(*) as count,
+        COALESCE(SUM(sale_price), 0)              as revenue,
+        COALESCE(SUM(sale_price - cost_price), 0) as margin,
+        COALESCE(SUM(cost_price), 0)              as invested
+      FROM sales
+      WHERE EXTRACT(YEAR  FROM sale_date) = ${period.year}
+        AND EXTRACT(MONTH FROM sale_date) = ${period.month}
+    `
+  } else {
+    salesRows = await sql`
+      SELECT COUNT(*) as count,
+        COALESCE(SUM(sale_price), 0)              as revenue,
+        COALESCE(SUM(sale_price - cost_price), 0) as margin,
+        COALESCE(SUM(cost_price), 0)              as invested
+      FROM sales
+      WHERE EXTRACT(MONTH FROM sale_date) = EXTRACT(MONTH FROM NOW())
+        AND EXTRACT(YEAR  FROM sale_date) = EXTRACT(YEAR  FROM NOW())
+    `
+  }
+
+  const [stockRows, leadsRows, oldestCars, mktValue, yearsRows] = await Promise.all([
     // Estoque por status
     sql`SELECT status, COUNT(*) as count FROM cars WHERE status != 'sold' GROUP BY status`,
     // Leads por status
     sql`SELECT status, COUNT(*) as count FROM leads GROUP BY status`,
-    // Vendas do mês
-    sql`
-      SELECT COUNT(*) as count,
-        COALESCE(SUM(sale_price), 0)            as revenue,
-        COALESCE(SUM(sale_price - cost_price), 0) as margin,
-        COALESCE(SUM(cost_price), 0)            as invested
-      FROM sales
-      WHERE EXTRACT(MONTH FROM sale_date) = EXTRACT(MONTH FROM NOW())
-        AND EXTRACT(YEAR  FROM sale_date) = EXTRACT(YEAR  FROM NOW())
-    `,
     // Carros parados há mais tempo
     sql`
       SELECT c.*,
@@ -46,6 +84,8 @@ async function getDashboardData() {
       FROM cars
       WHERE status = 'available'
     `,
+    // Anos disponíveis nas vendas
+    sql`SELECT DISTINCT EXTRACT(YEAR FROM sale_date)::int as year FROM sales ORDER BY year DESC`,
   ])
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -54,8 +94,10 @@ async function getDashboardData() {
   const leads = Object.fromEntries(leadsRows.map((r: any) => [r.status, parseInt(r.count)]))
   const sales = salesRows[0]
   const mkt   = mktValue[0]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const availableYears: number[] = yearsRows.map((r: any) => r.year)
 
-  return { stock, leads, sales, oldestCars, mkt }
+  return { stock, leads, sales, oldestCars, mkt, availableYears }
 }
 
 const FUNNEL_STAGES = [
@@ -65,8 +107,48 @@ const FUNNEL_STAGES = [
   { key: 'ligar_de_volta', label: 'Ligar de volta', color: '#E86020' },
 ]
 
-export default async function AdminDashboard() {
-  const { stock, leads, sales, oldestCars, mkt } = await getDashboardData()
+const MONTH_NAMES = [
+  'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+  'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',
+]
+
+function periodSuffix(period: PeriodMode): string {
+  if (period.type === 'all')   return 'total'
+  if (period.type === 'year')  return `de ${period.year}`
+  if (period.type === 'month') {
+    const m = MONTH_NAMES[period.month - 1]
+    return `de ${m.toLowerCase()}/${period.year.toString().slice(2)}`
+  }
+  return 'do mês'
+}
+
+function periodSubline(period: PeriodMode): string {
+  if (period.type === 'all')   return 'todo o histórico'
+  if (period.type === 'year')  return `todo o ano de ${period.year}`
+  if (period.type === 'month') return `em ${MONTH_NAMES[period.month - 1].toLowerCase()} de ${period.year}`
+  return 'mês corrente'
+}
+
+export default async function AdminDashboard({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | undefined>>
+}) {
+  const params = await searchParams
+
+  const isAllTime = params.period === 'all'
+  const yearParam  = !isAllTime && params.year  ? parseInt(params.year)  : undefined
+  const monthParam = !isAllTime && params.month ? parseInt(params.month) : undefined
+
+  const period: PeriodMode = isAllTime
+    ? { type: 'all' }
+    : yearParam && monthParam
+    ? { type: 'month', year: yearParam, month: monthParam }
+    : yearParam
+    ? { type: 'year', year: yearParam }
+    : { type: 'current' }
+
+  const { stock, leads, sales, oldestCars, mkt, availableYears } = await getDashboardData(period)
 
   const available  = stock.available || 0
   const reserved   = stock.reserved  || 0
@@ -80,32 +162,46 @@ export default async function AdminDashboard() {
   const marketValue  = parseFloat(mkt.market_value ?? '0')
   const patrimony    = parseFloat(mkt.patrimony ?? '0')
 
-  const salesRevenue   = parseFloat(sales.revenue  ?? '0')
-  const salesMargin    = parseFloat(sales.margin   ?? '0')
-  const marginPct      = salesRevenue > 0 ? (salesMargin / salesRevenue) * 100 : 0
+  const salesRevenue = parseFloat(sales.revenue  ?? '0')
+  const salesMargin  = parseFloat(sales.margin   ?? '0')
+  const marginPct    = salesRevenue > 0 ? (salesMargin / salesRevenue) * 100 : 0
   const patrimonyLabel = noMargin > 0
     ? `${noMargin} sem custo definido`
     : `custo de ${totalStock} carro${totalStock !== 1 ? 's' : ''}`
 
+  const suffix = periodSuffix(period)
+
   const topCards = [
-    { label: 'Carros disponíveis', value: available.toString(),        sub: `${totalStock} no total`,       icon: Car,         color: '#10B981', href: '/admin/estoque' },
-    { label: 'Valor de mercado',   value: formatCurrency(marketValue), sub: 'se vender tudo na tabela',     icon: TrendingUp,  color: '#E86020', href: '/admin/estoque' },
-    { label: 'Patrimônio',         value: formatCurrency(patrimony),   sub: patrimonyLabel,                  icon: Package,     color: noMargin > 0 ? '#EF4444' : '#8B5CF6', href: '/admin/estoque' },
-    { label: 'Margem do mês',      value: `${marginPct.toFixed(1)}%`,  sub: salesRevenue > 0 ? `lucro / faturamento` : 'sem vendas no mês', icon: AlertCircle, color: marginPct >= 10 ? '#10B981' : marginPct > 0 ? '#F59E0B' : '#EF4444', href: '/admin/relatorios' },
-    { label: 'Em negociação',      value: activeLeads.toString(),      sub: 'clientes ativos',              icon: Users,       color: '#F59E0B', href: '/admin/clientes' },
-    { label: 'Vendas no mês',      value: sales.count.toString(),      sub: 'registradas nos Relatórios',   icon: TrendingUp,  color: '#10B981', href: '/admin/relatorios' },
-    { label: 'Investido no mês',   value: formatCurrency(sales.invested), sub: 'custo das vendas',          icon: DollarSign,  color: '#E86020', href: '/admin/relatorios' },
-    { label: 'Lucro do mês',       value: formatCurrency(salesMargin), sub: 'lançado nos Relatórios',       icon: DollarSign,  color: salesMargin >= 0 ? '#10B981' : '#EF4444', href: '/admin/relatorios' },
+    { label: 'Carros disponíveis', value: available.toString(),           sub: `${totalStock} no total`,        icon: Car,         color: '#10B981', href: '/admin/estoque' },
+    { label: 'Valor de mercado',   value: formatCurrency(marketValue),    sub: 'se vender tudo na tabela',      icon: TrendingUp,  color: '#E86020', href: '/admin/estoque' },
+    { label: 'Patrimônio',         value: formatCurrency(patrimony),      sub: patrimonyLabel,                   icon: Package,     color: noMargin > 0 ? '#EF4444' : '#8B5CF6', href: '/admin/estoque' },
+    { label: `Margem ${suffix}`,   value: `${marginPct.toFixed(1)}%`,     sub: salesRevenue > 0 ? 'lucro / faturamento' : `sem vendas (${periodSubline(period)})`, icon: AlertCircle, color: marginPct >= 10 ? '#10B981' : marginPct > 0 ? '#F59E0B' : '#EF4444', href: '/admin/relatorios' },
+    { label: 'Em negociação',      value: activeLeads.toString(),         sub: 'clientes ativos',               icon: Users,       color: '#F59E0B', href: '/admin/clientes' },
+    { label: `Vendas ${suffix}`,   value: sales.count.toString(),         sub: 'registradas nos Relatórios',    icon: TrendingUp,  color: '#10B981', href: '/admin/relatorios' },
+    { label: `Investido ${suffix}`,value: formatCurrency(sales.invested), sub: 'custo das vendas',              icon: DollarSign,  color: '#E86020', href: '/admin/relatorios' },
+    { label: `Lucro ${suffix}`,    value: formatCurrency(salesMargin),    sub: 'lançado nos Relatórios',        icon: DollarSign,  color: salesMargin >= 0 ? '#10B981' : '#EF4444', href: '/admin/relatorios' },
   ]
 
   const composicaoTotal = withMargin + noMargin
   const withMarginPct = composicaoTotal > 0 ? Math.round((withMargin / composicaoTotal) * 100) : 0
 
+  const selectedYear  = period.type === 'year' || period.type === 'month' ? period.year  : null
+  const selectedMonth = period.type === 'month' ? period.month : null
+
   return (
     <div>
-      <div className="mb-6">
+      <div className="mb-5">
         <h1 className="text-2xl font-bold text-white">Painel</h1>
         <p className="text-sm text-white/40 mt-1">Visão geral do estoque e das vendas.</p>
+      </div>
+
+      <div className="mb-6">
+        <PeriodFilter
+          availableYears={availableYears}
+          selectedYear={selectedYear}
+          selectedMonth={selectedMonth}
+          isAllTime={isAllTime}
+        />
       </div>
 
       {/* 8 stat cards */}
