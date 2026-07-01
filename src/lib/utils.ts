@@ -18,24 +18,6 @@ export function formatMileage(value: number | null | undefined): string {
   return new Intl.NumberFormat('pt-BR').format(value) + ' km'
 }
 
-interface StoredUtm {
-  utm_source?: string | null
-  utm_medium?: string | null
-  utm_campaign?: string | null
-}
-
-/** Lê o UTM salvo em cookie pela captura na primeira página visitada (ver UtmCapture.tsx) */
-export function getStoredUtm(): StoredUtm {
-  if (typeof document === 'undefined') return {}
-  const match = document.cookie.match(/(?:^|; )vmf_utm=([^;]*)/)
-  if (!match) return {}
-  try {
-    return JSON.parse(decodeURIComponent(match[1]))
-  } catch {
-    return {}
-  }
-}
-
 export function slugify(text: string): string {
   return text
     .toLowerCase()

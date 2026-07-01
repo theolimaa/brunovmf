@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { MessageCircle, X } from 'lucide-react'
-import { getStoredUtm } from '@/lib/utils'
 import { WHATSAPP_NUMBER } from '@/lib/whatsappConfig'
 
 interface WhatsAppCtaButtonProps {
@@ -26,15 +25,14 @@ export default function WhatsAppCtaButton({ carId, brand, model, year }: WhatsAp
     setSending(true)
 
     const urlParams = new URLSearchParams(window.location.search)
-    const stored = getStoredUtm()
 
     const payload = {
       car_id: carId,
       name: trimmedName,
       phone: trimmedPhone,
-      utm_source: urlParams.get('utm_source') ?? stored.utm_source ?? null,
-      utm_medium: urlParams.get('utm_medium') ?? stored.utm_medium ?? null,
-      utm_campaign: urlParams.get('utm_campaign') ?? stored.utm_campaign ?? null,
+      utm_source: urlParams.get('utm_source'),
+      utm_medium: urlParams.get('utm_medium'),
+      utm_campaign: urlParams.get('utm_campaign'),
     }
 
     const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' })
