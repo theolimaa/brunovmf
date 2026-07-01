@@ -190,31 +190,69 @@ export default async function HomePage() {
       </section>
 
       {/* ── QUEM É O BRUNO ── */}
-      <section id="sobre" className="py-14 sm:py-20 bg-[#0D0D0D]">
+      <section id="sobre" className="py-14 sm:py-24 bg-[#0D0D0D] overflow-hidden">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="max-w-2xl">
-            <p className="text-[#E86020] text-[11px] font-semibold uppercase tracking-[0.25em] mb-4 flex items-center gap-2">
-              <span className="w-6 h-px bg-[#E86020]" />
-              Quem é o Bruno
-            </p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
-            <div className="flex items-center gap-5 mb-7">
-              <div className="w-16 h-16 rounded-full bg-[#E86020]/10 border border-[#E86020]/30 flex items-center justify-center shrink-0">
-                <span className="font-[family-name:var(--font-montserrat)] font-black text-[#E86020] text-xl">BC</span>
+            {/* Left: text */}
+            <div>
+              <p className="text-[#E86020] text-[11px] font-semibold uppercase tracking-[0.25em] mb-6 flex items-center gap-2">
+                <span className="w-6 h-px bg-[#E86020]" />
+                Quem sou eu
+              </p>
+              <h2 className="font-[family-name:var(--font-montserrat)] text-4xl sm:text-5xl font-black text-white leading-[0.95] tracking-tight mb-6">
+                Bruno<br /><span className="text-[#E86020]">Cavalcante</span>
+              </h2>
+              <p className="text-white/40 text-sm uppercase tracking-widest mb-8 font-medium">Gerente · VMF Auto Store · Fortaleza</p>
+
+              <div className="space-y-5 text-white/60 text-base leading-relaxed">
+                <p>
+                  Trabalho com carro todo dia, então sei bem o que pesa na hora de comprar.
+                  Por isso aqui ninguém empurra nada: <span className="text-[#E86020] font-semibold">mostro o carro do jeito que ele é</span>, com laudo, checklist e Auto Center pra provar que tô falando a verdade.
+                </p>
+                <p>
+                  Se servir pra você, simbora. Se não servir, sou eu mesmo que vou falar.
+                </p>
               </div>
-              <div>
-                <h2 className="font-[family-name:var(--font-montserrat)] text-3xl sm:text-4xl font-black text-white">
-                  Bruno Cavalcante
-                </h2>
-                <p className="text-white/40 text-sm mt-1">Gerente da VMF Auto Store</p>
+
+              <div className="flex items-center gap-4 mt-10">
+                <a
+                  href="https://instagram.com/brunocfreitas_"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white/40 hover:text-[#E86020] transition-colors text-sm font-semibold flex items-center gap-2"
+                >
+                  <span className="text-[#E86020]">@</span>brunocfreitas_
+                </a>
+                <span className="w-px h-4 bg-white/10" />
+                <a
+                  href={WA_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white/40 hover:text-[#E86020] transition-colors text-sm font-semibold"
+                >
+                  Falar no WhatsApp
+                </a>
               </div>
             </div>
 
-            <p className="text-white/60 text-base leading-relaxed">
-              Trabalho com carro todo dia, então sei bem o que pesa na hora de comprar.
-              Por isso aqui ninguém empurra nada: <span className="text-[#E86020] font-semibold">mostro o carro do jeito que ele é</span>, com laudo, checklist e Auto Center pra provar que tô falando a verdade.
-              Se servir pra você, simbora. Se não servir, sou eu mesmo que vou falar.
-            </p>
+            {/* Right: photo */}
+            <div className="relative flex justify-center lg:justify-end">
+              <div className="relative w-[300px] sm:w-[360px]">
+                {/* Glow behind photo */}
+                <div className="absolute inset-0 rounded-[24px] bg-[#E86020]/20 blur-3xl scale-110 pointer-events-none" />
+                <img
+                  src="/foto-bruno.jpg"
+                  alt="Bruno Cavalcante Freitas"
+                  className="relative w-full aspect-[3/4] object-cover object-top rounded-[24px] border border-white/10"
+                />
+                {/* Badge */}
+                <div className="absolute -bottom-4 -left-4 bg-[#E86020] text-white text-xs font-bold uppercase tracking-widest px-4 py-2.5 rounded-[10px] shadow-lg">
+                  VMF Auto Store
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
