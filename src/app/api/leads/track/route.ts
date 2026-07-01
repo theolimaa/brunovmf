@@ -5,6 +5,8 @@ import { sql } from '@/lib/db'
  * Registra automaticamente um lead quando alguém clica em "Falar no WhatsApp"
  * na página de um carro. Sem autenticação de admin — é chamado pelo público,
  * geralmente via navigator.sendBeacon no instante em que a pessoa sai pro WhatsApp.
+ * Nome/telefone vêm preenchidos quando o visitante passa pela caixinha antes do
+ * redirecionamento; se não vierem, cai no placeholder "Lead do site".
  */
 export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => null)
@@ -20,11 +22,12 @@ export async function POST(request: NextRequest) {
   const source = utm_source ? 'trafego_pago' : 'site'
 
   const [car] = await sql`SELECT brand, model FROM cars WHERE id = ${car_id}`
-  const name = car ? `Lead do site — ${car.brand} ${car.model}` : 'Lead do site'
+  const name = body?.name?.trim() || (car ? `Lead do site — ${car.brand} ${car.model}` : 'Lead do site')
+  const phone = body?.phone?.trim() || null
 
   const [lead] = await sql`
     INSERT INTO leads (car_id, name, phone, status, source, utm_source, utm_medium, utm_campaign)
-    VALUES (${car_id}, ${name}, NULL, 'lead_novo', ${source}, ${utm_source}, ${utm_medium}, ${utm_campaign})
+    VALUES (${car_id}, ${name}, ${phone}, 'lead_novo', ${source}, ${utm_source}, ${utm_medium}, ${utm_campaign})
     RETURNING *
   `
 

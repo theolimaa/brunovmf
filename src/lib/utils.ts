@@ -18,11 +18,6 @@ export function formatMileage(value: number | null | undefined): string {
   return new Intl.NumberFormat('pt-BR').format(value) + ' km'
 }
 
-export function buildWhatsAppUrl(brand: string, model: string, year: number): string {
-  const message = `Olá Bruno! Vi o ${brand} ${model} ${year} no seu site e tenho interesse. Podemos conversar?`
-  return `https://wa.me/5585989000364?text=${encodeURIComponent(message)}`
-}
-
 interface StoredUtm {
   utm_source?: string | null
   utm_medium?: string | null

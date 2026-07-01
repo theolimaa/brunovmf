@@ -5,7 +5,7 @@ import { Car } from '@/types'
 import CarGallery from '@/components/CarGallery'
 import { CarStatusBadge } from '@/components/ui/Badge'
 import WhatsAppCtaButton from '@/components/WhatsAppCtaButton'
-import { buildWhatsAppUrl, formatCurrency, formatMileage } from '@/lib/utils'
+import { formatCurrency, formatMileage } from '@/lib/utils'
 import { Calendar, Fuel, Gauge, Settings2, Palette } from 'lucide-react'
 
 async function getCar(id: string): Promise<Car | null> {
@@ -33,8 +33,6 @@ export default async function CarDetailPage({ params }: PageProps) {
   const car = await getCar(id)
 
   if (!car) notFound()
-
-  const whatsAppUrl = buildWhatsAppUrl(car.brand, car.model, car.year)
 
   const specs = [
     { icon: Calendar, label: 'Ano', value: car.year.toString() },
@@ -90,7 +88,7 @@ export default async function CarDetailPage({ params }: PageProps) {
 
             {/* WhatsApp CTA */}
             {car.status !== 'sold' && (
-              <WhatsAppCtaButton carId={car.id} whatsAppUrl={whatsAppUrl} />
+              <WhatsAppCtaButton carId={car.id} brand={car.brand} model={car.model} year={car.year} />
             )}
 
             <p className="text-center text-xs text-white/30 mt-3">
