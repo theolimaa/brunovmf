@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { MessageCircle, X } from 'lucide-react'
 import { getStoredUtm } from '@/lib/utils'
+import { WHATSAPP_NUMBER } from '@/lib/whatsappConfig'
 
 interface WhatsAppCtaButtonProps {
   carId: string
@@ -43,7 +44,7 @@ export default function WhatsAppCtaButton({ carId, brand, model, year }: WhatsAp
     }
 
     const message = `Olá Bruno! Me chamo ${trimmedName}, vi o ${brand} ${model} ${year} no seu site e tenho interesse. Podemos conversar?`
-    window.open(`https://wa.me/5585989000364?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer')
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer')
     setOpen(false)
   }
 

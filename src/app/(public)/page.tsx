@@ -4,8 +4,9 @@ import { Car } from '@/types'
 import CarCard from '@/components/CarCard'
 import Link from 'next/link'
 import { Wrench, Shield, Globe, MapPin, Phone, ChevronRight, Clock } from 'lucide-react'
+import { WHATSAPP_NUMBER } from '@/lib/whatsappConfig'
 
-const WA_URL = 'https://wa.me/5585989000364?text=Olá Bruno! Gostaria de saber mais sobre os veículos.'
+const WA_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=Olá Bruno! Gostaria de saber mais sobre os veículos.`
 
 async function getFeaturedCars(): Promise<Car[]> {
   await connection()

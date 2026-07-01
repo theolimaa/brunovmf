@@ -2,8 +2,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import MobileMenu from '@/components/MobileMenu'
 import UtmCapture from '@/components/UtmCapture'
+import { WHATSAPP_NUMBER } from '@/lib/whatsappConfig'
 
-const WA_URL = 'https://wa.me/5585989000364?text=Olá Bruno! Gostaria de saber mais sobre os veículos.'
+const WA_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=Olá Bruno! Gostaria de saber mais sobre os veículos.`
 
 const WhatsAppIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">

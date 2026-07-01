@@ -3,6 +3,7 @@ import { sql, query } from '@/lib/db'
 import { Car } from '@/types'
 import CarCard from '@/components/CarCard'
 import { Search, SlidersHorizontal } from 'lucide-react'
+import { WHATSAPP_NUMBER } from '@/lib/whatsappConfig'
 
 async function getCars(searchParams: Record<string, string | undefined>): Promise<Car[]> {
   await connection()
@@ -146,7 +147,7 @@ export default async function CarrosPage({ searchParams }: PageProps) {
             <p className="text-lg font-medium text-[#0D0D0D]/50">Nenhum veículo encontrado</p>
             <p className="text-sm mt-1">Tente outros filtros ou fale diretamente com o Bruno.</p>
             <a
-              href="https://wa.me/5585989000364"
+              href={`https://wa.me/${WHATSAPP_NUMBER}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block mt-6 bg-[#25D366] hover:bg-[#1fb85a] text-white text-xs font-semibold uppercase tracking-wider px-5 py-3 rounded-[8px] transition-colors"
