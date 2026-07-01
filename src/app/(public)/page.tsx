@@ -87,9 +87,6 @@ export default async function HomePage() {
               WhatsApp
             </a>
           </div>
-          <p className="text-white/30 text-[10px] font-medium uppercase tracking-[0.25em] mt-8 text-center sm:text-left">
-            Bruno Cavalcante · Gerente VMF Auto Store · Fortaleza, CE
-          </p>
         </div>
 
         <div
