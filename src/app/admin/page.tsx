@@ -56,7 +56,7 @@ async function getDashboardData(period: PeriodMode) {
     `
   }
 
-  const [stockRows, leadsRows, oldestCars, mktValue, yearsRows] = await Promise.all([
+  const [stockRows, leadsRows, oldestCars, mktValue] = await Promise.all([
     // Estoque por status
     sql`SELECT status, COUNT(*) as count FROM cars WHERE status != 'sold' GROUP BY status`,
     // Leads por status
@@ -84,8 +84,6 @@ async function getDashboardData(period: PeriodMode) {
       FROM cars
       WHERE status = 'available'
     `,
-    // Anos disponíveis nas vendas
-    sql`SELECT DISTINCT EXTRACT(YEAR FROM sale_date)::int as year FROM sales ORDER BY year DESC`,
   ])
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -94,10 +92,8 @@ async function getDashboardData(period: PeriodMode) {
   const leads = Object.fromEntries(leadsRows.map((r: any) => [r.status, parseInt(r.count)]))
   const sales = salesRows[0]
   const mkt   = mktValue[0]
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const availableYears: number[] = yearsRows.map((r: any) => r.year)
 
-  return { stock, leads, sales, oldestCars, mkt, availableYears }
+  return { stock, leads, sales, oldestCars, mkt }
 }
 
 const FUNNEL_STAGES = [
@@ -148,7 +144,8 @@ export default async function AdminDashboard({
     ? { type: 'year', year: yearParam }
     : { type: 'current' }
 
-  const { stock, leads, sales, oldestCars, mkt, availableYears } = await getDashboardData(period)
+  const { stock, leads, sales, oldestCars, mkt } = await getDashboardData(period)
+  const availableYears = Array.from({ length: 13 }, (_, i) => 2024 + i) // 2024–2036
 
   const available  = stock.available || 0
   const reserved   = stock.reserved  || 0
