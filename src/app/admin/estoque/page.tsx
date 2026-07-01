@@ -7,6 +7,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import DeleteCarButton from './DeleteCarButton'
 import ImportPhotosButton from '@/components/ImportPhotosButton'
+import CopyAdLinkButton from '@/components/CopyAdLinkButton'
 import { Plus } from 'lucide-react'
 
 async function getCars(): Promise<Car[]> {
@@ -114,6 +115,7 @@ export default async function EstoquePage() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2 justify-end">
+                        <CopyAdLinkButton carId={car.id} brand={car.brand} model={car.model} />
                         <Link
                           href={`/admin/estoque/${car.id}`}
                           className="text-xs text-white/40 hover:text-white transition-colors"

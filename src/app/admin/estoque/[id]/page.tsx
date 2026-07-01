@@ -7,6 +7,7 @@ import { ChevronLeft, Edit2, ExternalLink, Tag, Pencil } from 'lucide-react'
 import { formatCurrency, formatMileage, calcMargin } from '@/lib/utils'
 import DeleteCarButton from '../DeleteCarButton'
 import MarkAsSoldButton from './MarkAsSoldButton'
+import CopyAdLinkButton from '@/components/CopyAdLinkButton'
 
 async function getLeads() {
   await connection()
@@ -155,6 +156,10 @@ export default async function CarAdminDetail({ params }: { params: Promise<{ id:
         costPrice={car.cost_price ?? null}
         leads={leads}
       />
+
+      <div className="mt-2">
+        <CopyAdLinkButton carId={car.id} brand={car.brand} model={car.model} variant="block" />
+      </div>
 
       <div className="mt-2">
         <DeleteCarButton carId={car.id} carName={`${car.brand} ${car.model}`} variant="block" />
