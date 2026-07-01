@@ -8,7 +8,7 @@ import { calcMargin, formatCurrency } from '@/lib/utils'
 import toast from 'react-hot-toast'
 
 interface SaleFormProps {
-  cars: { id: string; brand: string; model: string; year: number; price: string; cost_price: string | null }[]
+  cars: { id: string; brand: string; model: string; year: number; price: string; cost_price: string | null; status: string }[]
   leads: { id: string; name: string; phone: string; car_id: string | null }[]
 }
 
@@ -86,7 +86,20 @@ export default function SaleForm({ cars, leads }: SaleFormProps) {
     <form onSubmit={handleSubmit} className="space-y-4">
       <Select label="Veículo" id="car_id" value={form.car_id} onChange={e => update('car_id', e.target.value)}>
         <option value="">Selecione (opcional)</option>
-        {cars.map(c => <option key={c.id} value={c.id}>{c.brand} {c.model} {c.year}</option>)}
+        {cars.filter(c => c.status !== 'sold').length > 0 && (
+          <optgroup label="Disponíveis">
+            {cars.filter(c => c.status !== 'sold').map(c => (
+              <option key={c.id} value={c.id}>{c.brand} {c.model} {c.year}</option>
+            ))}
+          </optgroup>
+        )}
+        {cars.filter(c => c.status === 'sold').length > 0 && (
+          <optgroup label="Vendidos sem registro">
+            {cars.filter(c => c.status === 'sold').map(c => (
+              <option key={c.id} value={c.id}>{c.brand} {c.model} {c.year}</option>
+            ))}
+          </optgroup>
+        )}
       </Select>
 
       <Select label="Lead (cliente)" id="lead_id" value={form.lead_id} onChange={e => update('lead_id', e.target.value)}>

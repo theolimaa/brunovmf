@@ -20,7 +20,14 @@ async function getSales(): Promise<Sale[]> {
 
 async function getAvailableCars() {
   await connection()
-  return sql`SELECT id, brand, model, year, price, cost_price FROM cars WHERE status != 'sold' ORDER BY brand, model`
+  // inclui carros disponíveis + vendidos sem registro de venda (para lançamento retroativo)
+  return sql`
+    SELECT id, brand, model, year, price, cost_price, status
+    FROM cars
+    WHERE status != 'sold'
+       OR id NOT IN (SELECT car_id FROM sales WHERE car_id IS NOT NULL)
+    ORDER BY status, brand, model
+  `
 }
 
 async function getActiveLeads() {
