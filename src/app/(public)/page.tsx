@@ -75,10 +75,10 @@ export default async function HomePage() {
           <p className="text-white/60 text-sm sm:text-base max-w-lg mb-8 sm:mb-10 leading-relaxed">
             A única loja em Fortaleza com Auto Center própria. Laudo cautelar 100% aprovado, avaliação justa do seu usado e financiamento nos principais bancos. Tudo num só lugar, do jeito certo.
           </p>
-          <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 sm:gap-4">
+          <div className="flex flex-row flex-wrap items-center gap-3">
             <Link
               href="/carros"
-              className="bg-[#E86020] hover:bg-[#d4551a] text-white font-semibold text-sm uppercase tracking-wider px-7 py-4 rounded-[10px] transition-colors shadow-[0_4px_24px_rgba(232,96,32,0.25)] text-center"
+              className="bg-[#E86020] hover:bg-[#d4551a] text-white font-semibold text-sm uppercase tracking-wider px-5 py-3 rounded-[10px] transition-colors shadow-[0_4px_24px_rgba(232,96,32,0.25)]"
             >
               Ver veículos
             </Link>
@@ -86,7 +86,7 @@ export default async function HomePage() {
               href={WA_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2.5 bg-[#25D366] hover:bg-[#1fb85a] text-white font-semibold text-sm px-7 py-4 rounded-[10px] transition-colors"
+              className="flex items-center gap-2 bg-[#25D366] hover:bg-[#1fb85a] text-white font-semibold text-sm px-5 py-3 rounded-[10px] transition-colors"
             >
               <WhatsAppIcon />
               WhatsApp
