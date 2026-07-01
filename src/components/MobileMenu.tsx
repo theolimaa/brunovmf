@@ -17,7 +17,7 @@ export default function MobileMenu() {
     <>
       <button
         onClick={() => setOpen(v => !v)}
-        className="md:hidden p-2 -mr-1 text-[#0D0D0D]/60 hover:text-[#0D0D0D] transition-colors"
+        className="md:hidden p-2 -mr-1 text-white/80 hover:text-white transition-colors"
         aria-label={open ? 'Fechar menu' : 'Abrir menu'}
       >
         {open ? <X size={22} /> : <Menu size={22} />}
@@ -25,7 +25,7 @@ export default function MobileMenu() {
 
       {open && (
         <div
-          className="md:hidden fixed inset-0 top-16 z-40 bg-[#F5F4F2]"
+          className="md:hidden fixed inset-0 top-16 z-40 bg-[#0D0D0D]"
           onClick={() => setOpen(false)}
         >
           <nav className="px-4 py-2">
@@ -33,7 +33,7 @@ export default function MobileMenu() {
               <a
                 key={label}
                 href={href}
-                className="flex justify-center py-4 text-[15px] font-medium text-[#0D0D0D]/70 hover:text-[#0D0D0D] border-b border-black/8 transition-colors"
+                className="flex justify-center py-4 text-[15px] font-semibold text-white/70 hover:text-white border-b border-white/10 transition-colors"
               >
                 {label}
               </a>
