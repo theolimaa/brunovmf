@@ -17,8 +17,7 @@ export default function DeleteCarButton({ carId, carName, variant = 'inline' }: 
       const res = await fetch(`/api/cars/${carId}`, { method: 'DELETE' })
       if (!res.ok) throw new Error()
       toast.success('Carro removido')
-      router.push('/admin/estoque')
-      router.refresh()
+      window.location.href = '/admin/estoque'
     } catch {
       toast.error('Erro ao remover carro')
     }

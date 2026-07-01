@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { CheckCircle, X } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { calcMargin, formatCurrency } from '@/lib/utils'
@@ -17,7 +16,6 @@ interface Props {
 const today = () => new Date().toISOString().split('T')[0]
 
 export default function MarkAsSoldButton({ carId, carName, currentStatus, price, costPrice }: Props) {
-  const router = useRouter()
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [salePrice, setSalePrice] = useState(price)
@@ -66,8 +64,7 @@ export default function MarkAsSoldButton({ carId, carName, currentStatus, price,
       })
       if (!res.ok) throw new Error()
       toast.success('Venda registrada com sucesso!')
-      router.push('/admin/estoque')
-      router.refresh()
+      window.location.href = '/admin/estoque'
     } catch {
       toast.error('Erro ao registrar venda')
     } finally {
