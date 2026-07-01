@@ -16,36 +16,34 @@ export default function WhatsAppCtaButton({ carId, brand, model, year }: WhatsAp
   const [open, setOpen] = useState(false)
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
+  const [sending, setSending] = useState(false)
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     const trimmedName = name.trim()
     const trimmedPhone = phone.trim()
-    if (!trimmedName || !trimmedPhone) return
+    if (!trimmedName || !trimmedPhone || sending) return
+    setSending(true)
 
-    const sessionKey = `wa_tracked_${carId}`
-    if (!sessionStorage.getItem(sessionKey)) {
-      sessionStorage.setItem(sessionKey, '1')
+    const urlParams = new URLSearchParams(window.location.search)
+    const stored = getStoredUtm()
 
-      const urlParams = new URLSearchParams(window.location.search)
-      const stored = getStoredUtm()
-
-      const payload = {
-        car_id: carId,
-        name: trimmedName,
-        phone: trimmedPhone,
-        utm_source: urlParams.get('utm_source') ?? stored.utm_source ?? null,
-        utm_medium: urlParams.get('utm_medium') ?? stored.utm_medium ?? null,
-        utm_campaign: urlParams.get('utm_campaign') ?? stored.utm_campaign ?? null,
-      }
-
-      const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' })
-      navigator.sendBeacon('/api/leads/track', blob)
+    const payload = {
+      car_id: carId,
+      name: trimmedName,
+      phone: trimmedPhone,
+      utm_source: urlParams.get('utm_source') ?? stored.utm_source ?? null,
+      utm_medium: urlParams.get('utm_medium') ?? stored.utm_medium ?? null,
+      utm_campaign: urlParams.get('utm_campaign') ?? stored.utm_campaign ?? null,
     }
+
+    const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' })
+    navigator.sendBeacon('/api/leads/track', blob)
 
     const message = `Olá Bruno! Me chamo ${trimmedName}, vi o ${brand} ${model} ${year} no seu site e tenho interesse. Podemos conversar?`
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer')
     setOpen(false)
+    setSending(false)
   }
 
   return (
@@ -96,7 +94,8 @@ export default function WhatsAppCtaButton({ carId, brand, model, year }: WhatsAp
               />
               <button
                 type="submit"
-                className="w-full flex items-center justify-center gap-2 bg-[#E86020] hover:bg-[#d4551a] text-white font-semibold text-sm uppercase tracking-wider py-3 rounded-[10px] transition-colors"
+                disabled={sending}
+                className="w-full flex items-center justify-center gap-2 bg-[#E86020] hover:bg-[#d4551a] text-white font-semibold text-sm uppercase tracking-wider py-3 rounded-[10px] transition-colors disabled:opacity-50"
               >
                 <MessageCircle size={16} />
                 Falar com Bruno
