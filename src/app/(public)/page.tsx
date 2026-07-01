@@ -51,15 +51,15 @@ export default async function HomePage() {
   return (
     <div className="bg-[#F5F4F2]">
       {/* ── HERO ── */}
-      <section className="relative min-h-[100svh] flex flex-col justify-end overflow-hidden bg-[#F5F4F2]">
-        {/* Decorative background elements */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-20 right-0 w-[600px] h-[600px] bg-[#E86020]/6 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#E86020]/4 rounded-full blur-3xl" />
-          {/* Large decorative "VMF" text */}
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 text-[#0D0D0D]/[0.03] font-black text-[30vw] leading-none select-none font-[family-name:var(--font-montserrat)] pr-4">
-            VMF
-          </div>
+      <section className="relative min-h-[100svh] flex flex-col justify-end overflow-hidden bg-[#0D0D0D]">
+        {/* Fachada VMF como background */}
+        <div className="absolute inset-0">
+          <img
+            src="/fachada-vmf.webp"
+            alt="VMF Auto Store"
+            className="w-full h-full object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0D0D0D] via-[#0D0D0D]/60 to-[#0D0D0D]/20" />
         </div>
 
         <div className="relative max-w-7xl mx-auto px-4 w-full pb-16 sm:pb-24 pt-20 sm:pt-40">
@@ -67,12 +67,12 @@ export default async function HomePage() {
             <span className="w-8 h-px bg-[#E86020]" />
             VMF Auto Store · Seminovos Premium · Fortaleza, CE
           </p>
-          <h1 className="font-[family-name:var(--font-montserrat)] text-4xl sm:text-6xl lg:text-7xl font-black text-[#0D0D0D] leading-[0.92] tracking-tight mb-6 max-w-3xl">
+          <h1 className="font-[family-name:var(--font-montserrat)] text-4xl sm:text-6xl lg:text-7xl font-black text-white leading-[0.92] tracking-tight mb-6 max-w-3xl">
             Seu próximo carro,<br />
             com a <span className="text-[#E86020]">procedência</span><br />
             que você merece.
           </h1>
-          <p className="text-[#0D0D0D]/50 text-sm sm:text-base max-w-lg mb-8 sm:mb-10 leading-relaxed">
+          <p className="text-white/60 text-sm sm:text-base max-w-lg mb-8 sm:mb-10 leading-relaxed">
             A única loja em Fortaleza com Auto Center própria. Laudo cautelar 100% aprovado, avaliação justa do seu usado e financiamento nos principais bancos. Tudo num só lugar, do jeito certo.
           </p>
           <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 sm:gap-4">
@@ -98,7 +98,7 @@ export default async function HomePage() {
           className="hidden sm:block absolute right-0 top-1/2 -translate-y-1/2 -translate-x-6 text-[#0D0D0D]/20 text-[10px] font-semibold uppercase tracking-[0.4em]"
           style={{ writingMode: 'vertical-rl' }}
         >
-          Role para descobrir
+          <span className="text-white/30">Role para descobrir</span>
         </div>
       </section>
 
