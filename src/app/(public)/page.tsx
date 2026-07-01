@@ -63,19 +63,18 @@ export default async function HomePage() {
         </div>
 
         <div className="relative max-w-7xl mx-auto px-4 w-full pb-16 sm:pb-24 pt-20 sm:pt-40">
-          <p className="text-[#E86020] text-[11px] font-semibold uppercase tracking-[0.3em] mb-6 flex items-center gap-3">
-            <span className="w-8 h-px bg-[#E86020]" />
-            VMF Auto Store · Seminovos Premium · Fortaleza, CE
+          <p className="text-[#E86020] text-[11px] font-semibold uppercase tracking-[0.3em] mb-6 flex items-center justify-center sm:justify-start gap-3 text-center sm:text-left">
+            <span className="w-8 h-px bg-[#E86020] hidden sm:block" />
+            Bruno Cavalcante · Gerente VMF Auto Store · Fortaleza, CE
           </p>
-          <h1 className="font-[family-name:var(--font-montserrat)] text-4xl sm:text-6xl lg:text-7xl font-black text-white leading-[0.92] tracking-tight mb-6 max-w-3xl">
-            Seu próximo carro,<br />
-            com a <span className="text-[#E86020]">procedência</span><br />
-            que você merece.
+          <h1 className="font-[family-name:var(--font-montserrat)] text-4xl sm:text-6xl lg:text-7xl font-black text-white leading-[0.92] tracking-tight mb-6 max-w-3xl text-center sm:text-left mx-auto sm:mx-0">
+            Carro com procedência,<br />
+            atendimento de <span className="text-[#E86020]">quem entende.</span>
           </h1>
-          <p className="text-white/60 text-sm sm:text-base max-w-lg mb-8 sm:mb-10 leading-relaxed">
-            A única loja em Fortaleza com Auto Center própria. Laudo cautelar 100% aprovado, avaliação justa do seu usado e financiamento nos principais bancos. Tudo num só lugar, do jeito certo.
+          <p className="text-white/60 text-sm sm:text-base max-w-lg mb-8 sm:mb-10 leading-relaxed text-center sm:text-left mx-auto sm:mx-0">
+            Sou Bruno Cavalcante, gerente da VMF Auto Store. Trabalho com carro todo dia e só vendo o que aprovaria pra mim mesmo. Laudo cautelar, Auto Center próprio e atendimento direto, sem enrolação.
           </p>
-          <div className="flex flex-row flex-wrap items-center gap-3">
+          <div className="flex flex-row flex-wrap items-center justify-center sm:justify-start gap-3">
             <Link
               href="/carros"
               className="bg-[#E86020] hover:bg-[#d4551a] text-white font-semibold text-sm uppercase tracking-wider px-5 py-3 rounded-[10px] transition-colors shadow-[0_4px_24px_rgba(232,96,32,0.25)]"
