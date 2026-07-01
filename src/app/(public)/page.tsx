@@ -63,10 +63,6 @@ export default async function HomePage() {
         </div>
 
         <div className="relative max-w-7xl mx-auto px-4 w-full pb-16 sm:pb-24 pt-20 sm:pt-40">
-          <p className="text-[#E86020] text-[11px] font-semibold uppercase tracking-[0.3em] mb-6 flex items-center justify-center sm:justify-start gap-3 text-center sm:text-left">
-            <span className="w-8 h-px bg-[#E86020] hidden sm:block" />
-            Bruno Cavalcante · Gerente VMF Auto Store · Fortaleza, CE
-          </p>
           <h1 className="font-[family-name:var(--font-montserrat)] text-4xl sm:text-6xl lg:text-7xl font-black text-white leading-[0.92] tracking-tight mb-6 max-w-3xl text-center sm:text-left mx-auto sm:mx-0">
             Carro com procedência,<br />
             atendimento de <span className="text-[#E86020]">quem entende.</span>
@@ -77,7 +73,7 @@ export default async function HomePage() {
           <div className="flex flex-row flex-wrap items-center justify-center sm:justify-start gap-3">
             <Link
               href="/carros"
-              className="bg-[#E86020] hover:bg-[#d4551a] text-white font-semibold text-sm uppercase tracking-wider px-5 py-3 rounded-[10px] transition-colors shadow-[0_4px_24px_rgba(232,96,32,0.25)]"
+              className="bg-white hover:bg-white/90 text-[#0D0D0D] font-semibold text-sm uppercase tracking-wider px-5 py-3 rounded-[10px] transition-colors"
             >
               Ver veículos
             </Link>
@@ -91,6 +87,9 @@ export default async function HomePage() {
               WhatsApp
             </a>
           </div>
+          <p className="text-white/30 text-[10px] font-medium uppercase tracking-[0.25em] mt-8 text-center sm:text-left">
+            Bruno Cavalcante · Gerente VMF Auto Store · Fortaleza, CE
+          </p>
         </div>
 
         <div
