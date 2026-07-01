@@ -8,6 +8,11 @@ import { formatCurrency, formatMileage, calcMargin } from '@/lib/utils'
 import DeleteCarButton from '../DeleteCarButton'
 import MarkAsSoldButton from './MarkAsSoldButton'
 
+async function getLeads() {
+  await connection()
+  return sql`SELECT id, name, phone FROM leads ORDER BY name` as unknown as Promise<{ id: string; name: string; phone: string }[]>
+}
+
 async function getCar(id: string) {
   await connection()
   const [car] = await sql`
@@ -25,7 +30,7 @@ async function getCar(id: string) {
 export default async function CarAdminDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const car: any = await getCar(id)
+  const [car, leads] = await Promise.all([getCar(id), getLeads()])
   if (!car) notFound()
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -148,6 +153,7 @@ export default async function CarAdminDetail({ params }: { params: Promise<{ id:
         currentStatus={car.status}
         price={car.price}
         costPrice={car.cost_price ?? null}
+        leads={leads}
       />
 
       <div className="mt-2">
