@@ -1,8 +1,10 @@
+import Link from 'next/link'
 import { connection } from 'next/server'
 import { sql } from '@/lib/db'
 import { Sale } from '@/types'
 import { formatCurrency, calcMargin } from '@/lib/utils'
 import SaleForm from '../vendas/SaleForm'
+import TrafficReportSection from './TrafficReportSection'
 import { TrendingUp, DollarSign, Percent } from 'lucide-react'
 
 async function getSales(): Promise<Sale[]> {
@@ -49,7 +51,17 @@ async function getSummary() {
   return { thisMonth: thisMonth[0], allTime: allTime[0] }
 }
 
-export default async function RelatoriosPage() {
+interface PageProps {
+  searchParams: Promise<{ tab?: string; year?: string; month?: string }>
+}
+
+export default async function RelatoriosPage({ searchParams }: PageProps) {
+  const params = await searchParams
+  const tab = params.tab === 'trafego' ? 'trafego' : 'vendas'
+  const now = new Date()
+  const year = params.year ? parseInt(params.year) : now.getFullYear()
+  const month = params.month ? parseInt(params.month) : now.getMonth() + 1
+
   const [sales, cars, leads, { thisMonth, allTime }] = await Promise.all([
     getSales(),
     getAvailableCars(),
@@ -61,13 +73,28 @@ export default async function RelatoriosPage() {
     ? (parseFloat(thisMonth.margin) / parseFloat(thisMonth.revenue)) * 100
     : 0
 
+  const tabClass = (active: boolean) =>
+    `px-3 py-1.5 rounded-[6px] text-xs font-medium transition-colors ${
+      active ? 'bg-[#E86020] text-white' : 'bg-white/6 text-white/50 hover:bg-white/10 hover:text-white/70'
+    }`
+
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-white">Relatórios</h1>
-        <p className="text-sm text-white/40 mt-1">Histórico e margem de lucro</p>
+      <div className="mb-6 flex items-center justify-between flex-wrap gap-3">
+        <div>
+          <h1 className="text-2xl font-bold text-white">Relatórios</h1>
+          <p className="text-sm text-white/40 mt-1">Histórico, margem e tráfego pago</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Link href="/admin/relatorios?tab=vendas" className={tabClass(tab === 'vendas')}>Vendas</Link>
+          <Link href="/admin/relatorios?tab=trafego" className={tabClass(tab === 'trafego')}>Tráfego pago</Link>
+        </div>
       </div>
 
+      {tab === 'trafego' ? (
+        <TrafficReportSection year={year} month={month} />
+      ) : (
+        <>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
         <div className="bg-[#1A1A1A] border border-white/8 rounded-[12px] p-4">
           <div className="flex items-center gap-2 mb-2">
@@ -158,6 +185,8 @@ export default async function RelatoriosPage() {
           </div>
         </div>
       </div>
+      </>
+      )}
     </div>
   )
 }
