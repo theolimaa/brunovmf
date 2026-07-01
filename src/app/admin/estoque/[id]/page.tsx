@@ -142,7 +142,13 @@ export default async function CarAdminDetail({ params }: { params: Promise<{ id:
         Registrar cliente / negociação
       </Link>
 
-      <MarkAsSoldButton carId={car.id} currentStatus={car.status} />
+      <MarkAsSoldButton
+        carId={car.id}
+        carName={`${car.brand} ${car.model} ${car.year}`}
+        currentStatus={car.status}
+        price={car.price}
+        costPrice={car.cost_price ?? null}
+      />
 
       <div className="mt-2">
         <DeleteCarButton carId={car.id} carName={`${car.brand} ${car.model}`} variant="block" />
