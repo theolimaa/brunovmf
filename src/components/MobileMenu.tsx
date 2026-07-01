@@ -33,7 +33,7 @@ export default function MobileMenu() {
               <a
                 key={label}
                 href={href}
-                className="flex py-4 text-[15px] font-medium text-[#0D0D0D]/70 hover:text-[#0D0D0D] border-b border-black/8 transition-colors"
+                className="flex justify-center py-4 text-[15px] font-medium text-[#0D0D0D]/70 hover:text-[#0D0D0D] border-b border-black/8 transition-colors"
               >
                 {label}
               </a>

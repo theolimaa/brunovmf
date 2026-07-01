@@ -14,8 +14,20 @@ export async function PATCH(
   const values: (string | null)[] = []
   let idx = 1
 
-  const { status, notes, contacted_at, visit_date, visit_time, came_to_store_at } = body
+  const { status, notes, contacted_at, visit_date, visit_time, came_to_store_at, name, phone, car_id } = body
 
+  if (name !== undefined) {
+    updates.push(`name = $${idx++}`)
+    values.push(name)
+  }
+  if (phone !== undefined) {
+    updates.push(`phone = $${idx++}`)
+    values.push(phone)
+  }
+  if (car_id !== undefined) {
+    updates.push(`car_id = $${idx++}`)
+    values.push(car_id === '' ? null : car_id)
+  }
   if (status !== undefined) {
     updates.push(`status = $${idx++}`)
     values.push(status)

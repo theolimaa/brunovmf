@@ -21,7 +21,7 @@ const InstagramIcon = () => (
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen flex flex-col bg-[#0D0D0D]">
-      <header className="fixed top-0 w-full z-50 bg-[#F5F4F2]/90 backdrop-blur-md border-b border-black/8">
+      <header className="fixed top-0 w-full z-50 bg-[#F5F4F2]/50 backdrop-blur-md border-b border-black/8">
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/">
             <Image src="/logo.png" alt="VMF Auto Store" width={110} height={36} className="object-contain brightness-0" />
