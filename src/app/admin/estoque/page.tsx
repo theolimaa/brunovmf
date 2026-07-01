@@ -6,6 +6,7 @@ import { formatCurrency, formatMileage, calcMargin } from '@/lib/utils'
 import Link from 'next/link'
 import Image from 'next/image'
 import DeleteCarButton from './DeleteCarButton'
+import ImportPhotosButton from '@/components/ImportPhotosButton'
 import { Plus } from 'lucide-react'
 
 async function getCars(): Promise<Car[]> {
@@ -33,13 +34,16 @@ export default async function EstoquePage() {
           <h1 className="text-2xl font-bold text-white">Estoque</h1>
           <p className="text-sm text-white/40 mt-1">{cars.length} veículos cadastrados</p>
         </div>
-        <Link
-          href="/admin/estoque/novo"
-          className="flex items-center gap-2 bg-[#E86020] hover:bg-[#d4551a] text-white text-xs font-semibold uppercase tracking-wider px-4 py-2.5 rounded-[8px] transition-colors"
-        >
-          <Plus size={14} />
-          Novo carro
-        </Link>
+        <div className="flex items-center gap-2">
+          <ImportPhotosButton />
+          <Link
+            href="/admin/estoque/novo"
+            className="flex items-center gap-2 bg-[#E86020] hover:bg-[#d4551a] text-white text-xs font-semibold uppercase tracking-wider px-4 py-2.5 rounded-[8px] transition-colors"
+          >
+            <Plus size={14} />
+            Novo carro
+          </Link>
+        </div>
       </div>
 
       {cars.length === 0 ? (
