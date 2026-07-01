@@ -80,15 +80,22 @@ export default async function AdminDashboard() {
   const marketValue  = parseFloat(mkt.market_value ?? '0')
   const patrimony    = parseFloat(mkt.patrimony ?? '0')
 
+  const salesRevenue   = parseFloat(sales.revenue  ?? '0')
+  const salesMargin    = parseFloat(sales.margin   ?? '0')
+  const marginPct      = salesRevenue > 0 ? (salesMargin / salesRevenue) * 100 : 0
+  const patrimonyLabel = noMargin > 0
+    ? `${noMargin} sem custo definido`
+    : `custo de ${totalStock} carro${totalStock !== 1 ? 's' : ''}`
+
   const topCards = [
-    { label: 'Carros disponíveis', value: available.toString(),     sub: `${totalStock} no total`,      icon: Car,         color: '#10B981', href: '/admin/estoque' },
-    { label: 'Valor de mercado',   value: formatCurrency(marketValue), sub: 'se vender tudo na tabela', icon: TrendingUp,  color: '#E86020', href: '/admin/estoque' },
-    { label: 'Patrimônio',         value: formatCurrency(patrimony),   sub: `custo de ${totalStock} carro${totalStock !== 1 ? 's' : ''}`, icon: Package, color: '#8B5CF6', href: '/admin/estoque' },
-    { label: 'Sem margem',         value: noMargin.toString(),         sub: 'precisam definir',          icon: AlertCircle, color: '#EF4444', href: '/admin/estoque' },
-    { label: 'Em negociação',      value: activeLeads.toString(),      sub: 'clientes ativos',           icon: Users,       color: '#F59E0B', href: '/admin/clientes' },
-    { label: 'Vendas no mês',      value: sales.count.toString(),      sub: 'registradas nos Relatórios',icon: TrendingUp,  color: '#10B981', href: '/admin/relatorios' },
-    { label: 'Investido no mês',   value: formatCurrency(sales.invested), sub: 'custo das vendas',       icon: DollarSign,  color: '#E86020', href: '/admin/relatorios' },
-    { label: 'Lucro do mês',       value: formatCurrency(sales.margin),  sub: 'lançado nos Relatórios',  icon: DollarSign,  color: parseFloat(sales.margin) >= 0 ? '#10B981' : '#EF4444', href: '/admin/relatorios' },
+    { label: 'Carros disponíveis', value: available.toString(),        sub: `${totalStock} no total`,       icon: Car,         color: '#10B981', href: '/admin/estoque' },
+    { label: 'Valor de mercado',   value: formatCurrency(marketValue), sub: 'se vender tudo na tabela',     icon: TrendingUp,  color: '#E86020', href: '/admin/estoque' },
+    { label: 'Patrimônio',         value: formatCurrency(patrimony),   sub: patrimonyLabel,                  icon: Package,     color: noMargin > 0 ? '#EF4444' : '#8B5CF6', href: '/admin/estoque' },
+    { label: 'Margem do mês',      value: `${marginPct.toFixed(1)}%`,  sub: salesRevenue > 0 ? `lucro / faturamento` : 'sem vendas no mês', icon: AlertCircle, color: marginPct >= 10 ? '#10B981' : marginPct > 0 ? '#F59E0B' : '#EF4444', href: '/admin/relatorios' },
+    { label: 'Em negociação',      value: activeLeads.toString(),      sub: 'clientes ativos',              icon: Users,       color: '#F59E0B', href: '/admin/clientes' },
+    { label: 'Vendas no mês',      value: sales.count.toString(),      sub: 'registradas nos Relatórios',   icon: TrendingUp,  color: '#10B981', href: '/admin/relatorios' },
+    { label: 'Investido no mês',   value: formatCurrency(sales.invested), sub: 'custo das vendas',          icon: DollarSign,  color: '#E86020', href: '/admin/relatorios' },
+    { label: 'Lucro do mês',       value: formatCurrency(salesMargin), sub: 'lançado nos Relatórios',       icon: DollarSign,  color: salesMargin >= 0 ? '#10B981' : '#EF4444', href: '/admin/relatorios' },
   ]
 
   const composicaoTotal = withMargin + noMargin
