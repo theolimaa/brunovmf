@@ -200,7 +200,7 @@ export default async function HomePage() {
                 Quem sou eu
               </p>
               <h2 className="font-[family-name:var(--font-montserrat)] text-4xl sm:text-5xl font-black text-white leading-[0.95] tracking-tight mb-6">
-                Bruno<br /><span className="text-[#E86020]">Cavalcante</span>
+                Bruno<br /><span className="text-[#E86020]">Freitas</span>
               </h2>
               <p className="text-white/40 text-sm uppercase tracking-widest mb-8 font-medium">Gerente · VMF Auto Store · Fortaleza</p>
 
@@ -247,7 +247,7 @@ export default async function HomePage() {
                 />
                 {/* Badge */}
                 <div className="absolute -bottom-4 -left-4 bg-[#E86020] text-white text-xs font-bold uppercase tracking-widest px-4 py-2.5 rounded-[10px] shadow-lg">
-                  VMF Auto Store
+                  Bruno Freitas
                 </div>
               </div>
             </div>
