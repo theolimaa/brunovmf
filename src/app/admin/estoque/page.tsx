@@ -6,7 +6,6 @@ import { formatCurrency, formatMileage, calcMargin } from '@/lib/utils'
 import Link from 'next/link'
 import Image from 'next/image'
 import DeleteCarButton from './DeleteCarButton'
-import ImportPhotosButton from '@/components/ImportPhotosButton'
 import CopyAdLinkButton from '@/components/CopyAdLinkButton'
 import { Plus } from 'lucide-react'
 
@@ -37,7 +36,6 @@ export default async function EstoquePage() {
           <p className="text-sm text-white/40 mt-1">{cars.length} veículos cadastrados</p>
         </div>
         <div className="flex items-center gap-2">
-          <ImportPhotosButton />
           <Link
             href="/admin/estoque/novo"
             className="flex items-center gap-2 bg-[#E86020] hover:bg-[#d4551a] text-white text-xs font-semibold uppercase tracking-wider px-4 py-2.5 rounded-[8px] transition-colors"
