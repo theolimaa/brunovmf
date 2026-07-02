@@ -7,6 +7,7 @@ export async function GET() {
       row_to_json(c) AS car
     FROM leads l
     LEFT JOIN cars c ON c.id = l.car_id
+    WHERE l.deleted_at IS NULL
     ORDER BY l.created_at DESC
   `
   return NextResponse.json(leads)

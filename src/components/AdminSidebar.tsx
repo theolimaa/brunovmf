@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { LayoutDashboard, Car, Users, CalendarDays, Target, BarChart2, LogOut, ExternalLink, KeyRound } from 'lucide-react'
+import { LayoutDashboard, Car, Users, CalendarDays, Target, BarChart2, LogOut, ExternalLink, KeyRound, Trash2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import toast from 'react-hot-toast'
 
@@ -14,6 +14,7 @@ const NAV = [
   { href: '/admin/agenda',     icon: CalendarDays,    label: 'Agenda' },
   { href: '/admin/metas',      icon: Target,          label: 'Metas' },
   { href: '/admin/relatorios', icon: BarChart2,       label: 'Relatórios' },
+  { href: '/admin/lixeira',    icon: Trash2,          label: 'Lixeira' },
 ]
 
 export default function AdminSidebar() {

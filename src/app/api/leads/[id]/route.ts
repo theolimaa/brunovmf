@@ -74,6 +74,6 @@ export async function DELETE(
 ) {
   await requireAdmin()
   const { id } = await params
-  await sql`DELETE FROM leads WHERE id = ${id}`
+  await sql`UPDATE leads SET deleted_at = NOW() WHERE id = ${id}`
   return NextResponse.json({ ok: true })
 }

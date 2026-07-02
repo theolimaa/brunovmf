@@ -20,11 +20,13 @@ async function getData() {
       FROM sales
       WHERE EXTRACT(MONTH FROM sale_date) = ${month}
         AND EXTRACT(YEAR  FROM sale_date) = ${year}
+        AND deleted_at IS NULL
     `,
     sql`
       SELECT status, COUNT(*) as count FROM leads
       WHERE EXTRACT(MONTH FROM created_at) = ${month}
         AND EXTRACT(YEAR  FROM created_at) = ${year}
+        AND deleted_at IS NULL
       GROUP BY status
     `,
   ])

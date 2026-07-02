@@ -10,6 +10,7 @@ export async function GET() {
     FROM sales s
     LEFT JOIN cars c ON c.id = s.car_id
     LEFT JOIN leads l ON l.id = s.lead_id
+    WHERE s.deleted_at IS NULL
     ORDER BY s.sale_date DESC, s.created_at DESC
   `
   return NextResponse.json(sales)
@@ -49,6 +50,6 @@ export async function DELETE(request: NextRequest) {
   const id = searchParams.get('id')
   if (!id) return NextResponse.json({ error: 'ID obrigatório' }, { status: 400 })
 
-  await sql`DELETE FROM sales WHERE id = ${id}`
+  await sql`UPDATE sales SET deleted_at = NOW() WHERE id = ${id}`
   return NextResponse.json({ ok: true })
 }

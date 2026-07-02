@@ -16,7 +16,7 @@ export async function GET(
       ) AS photos
     FROM cars c
     LEFT JOIN car_photos p ON p.car_id = c.id
-    WHERE c.id = ${id}
+    WHERE c.id = ${id} AND c.deleted_at IS NULL
     GROUP BY c.id
   `
 
@@ -84,6 +84,8 @@ export async function DELETE(
   await requireAdmin()
   const { id } = await params
 
-  await sql`DELETE FROM cars WHERE id = ${id}`
+  // Soft delete — vai pra lixeira. Fotos no Cloudinary só são apagadas na purga
+  // definitiva (manual em /admin/lixeira ou automática após 30 dias).
+  await sql`UPDATE cars SET deleted_at = NOW() WHERE id = ${id}`
   return NextResponse.json({ ok: true })
 }

@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
   const minPrice = searchParams.get('minPrice')
   const maxPrice = searchParams.get('maxPrice')
 
-  const conditions: string[] = []
+  const conditions: string[] = ['c.deleted_at IS NULL']
   const params: (string | number)[] = []
   let idx = 1
 
@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
     params.push(parseFloat(maxPrice))
   }
 
-  const where = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : ''
+  const where = `WHERE ${conditions.join(' AND ')}`
 
   const cars = await query(
     `SELECT c.*,

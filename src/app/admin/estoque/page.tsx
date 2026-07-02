@@ -20,6 +20,7 @@ async function getCars(): Promise<Car[]> {
       ) AS photos
     FROM cars c
     LEFT JOIN car_photos p ON p.car_id = c.id
+    WHERE c.deleted_at IS NULL
     GROUP BY c.id
     ORDER BY c.created_at DESC
   ` as unknown as Promise<Car[]>

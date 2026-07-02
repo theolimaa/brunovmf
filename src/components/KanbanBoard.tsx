@@ -246,12 +246,12 @@ function EditarClienteModal({ lead, cars, onClose, onSave, onDelete }: EditarCli
   }
 
   async function handleDelete() {
-    if (!confirm(`Remover ${lead.name} do Kanban?`)) return
+    if (!confirm(`Mover ${lead.name} para a lixeira? Você pode restaurar em até 30 dias, em Lixeira.`)) return
     setDeleting(true)
     try {
       await fetch(`/api/leads/${lead.id}`, { method: 'DELETE' })
       onDelete(lead.id)
-      toast.success('Cliente removido')
+      toast.success('Cliente movido para a lixeira')
       onClose()
     } catch {
       toast.error('Erro ao remover cliente')

@@ -14,6 +14,7 @@ async function getSales(): Promise<Sale[]> {
     FROM sales s
     LEFT JOIN cars c ON c.id = s.car_id
     LEFT JOIN leads l ON l.id = s.lead_id
+    WHERE s.deleted_at IS NULL
     ORDER BY s.sale_date DESC, s.created_at DESC
   ` as unknown as Promise<Sale[]>
 }
@@ -24,15 +25,16 @@ async function getAvailableCars() {
   return sql`
     SELECT id, brand, model, year, price, cost_price, status
     FROM cars
-    WHERE status != 'sold'
-       OR id NOT IN (SELECT car_id FROM sales WHERE car_id IS NOT NULL)
+    WHERE deleted_at IS NULL
+      AND (status != 'sold'
+       OR id NOT IN (SELECT car_id FROM sales WHERE car_id IS NOT NULL))
     ORDER BY status, brand, model
   `
 }
 
 async function getActiveLeads() {
   await connection()
-  return sql`SELECT id, name, phone, car_id FROM leads WHERE status NOT IN ('ganho', 'perdido') ORDER BY name`
+  return sql`SELECT id, name, phone, car_id FROM leads WHERE status NOT IN ('ganho', 'perdido') AND deleted_at IS NULL ORDER BY name`
 }
 
 async function getSummary() {
@@ -46,6 +48,7 @@ async function getSummary() {
       FROM sales
       WHERE EXTRACT(MONTH FROM sale_date) = EXTRACT(MONTH FROM NOW())
         AND EXTRACT(YEAR FROM sale_date) = EXTRACT(YEAR FROM NOW())
+        AND deleted_at IS NULL
     `,
     sql`
       SELECT
@@ -53,6 +56,7 @@ async function getSummary() {
         COALESCE(SUM(sale_price), 0) as revenue,
         COALESCE(SUM(sale_price - cost_price), 0) as margin
       FROM sales
+      WHERE deleted_at IS NULL
     `,
   ])
   return { thisMonth: thisMonth[0], allTime: allTime[0] }

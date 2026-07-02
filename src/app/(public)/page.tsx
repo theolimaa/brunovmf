@@ -18,7 +18,7 @@ async function getFeaturedCars(): Promise<Car[]> {
       ) AS photos
      FROM cars c
      LEFT JOIN car_photos p ON p.car_id = c.id
-     WHERE c.status != 'sold'
+     WHERE c.status != 'sold' AND c.deleted_at IS NULL
      GROUP BY c.id
      ORDER BY c.created_at DESC
      LIMIT 8`,
@@ -28,7 +28,7 @@ async function getFeaturedCars(): Promise<Car[]> {
 
 async function getTotalCount(): Promise<number> {
   await connection()
-  const rows = await sql`SELECT COUNT(*)::int AS count FROM cars WHERE status != 'sold'`
+  const rows = await sql`SELECT COUNT(*)::int AS count FROM cars WHERE status != 'sold' AND deleted_at IS NULL`
   return (rows[0] as { count: number }).count
 }
 
@@ -60,7 +60,7 @@ export default async function HomePage() {
             alt="VMF Auto Store"
             className="w-full h-full object-cover object-center"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0D0D0D] via-[#0D0D0D]/60 to-[#0D0D0D]/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0D0D0D] via-[#0D0D0D]/85 to-[#0D0D0D]/55" />
         </div>
 
         <div className="relative max-w-7xl mx-auto px-4 w-full pb-16 sm:pb-24 pt-20 sm:pt-40">
@@ -82,7 +82,7 @@ export default async function HomePage() {
               href={WA_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 bg-[#25D366] hover:bg-[#1fb85a] text-white font-semibold text-sm px-5 py-3 rounded-[10px] transition-colors"
+              className="hidden md:flex items-center gap-2 bg-[#25D366] hover:bg-[#1fb85a] text-white font-semibold text-sm px-5 py-3 rounded-[10px] transition-colors"
             >
               <WhatsAppIcon />
               WhatsApp

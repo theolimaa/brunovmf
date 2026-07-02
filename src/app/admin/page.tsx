@@ -24,6 +24,7 @@ async function getDashboardData(period: PeriodMode) {
         COALESCE(SUM(sale_price - cost_price), 0) as margin,
         COALESCE(SUM(cost_price), 0)              as invested
       FROM sales
+      WHERE deleted_at IS NULL
     `
   } else if (period.type === 'year') {
     salesRows = await sql`
@@ -32,7 +33,7 @@ async function getDashboardData(period: PeriodMode) {
         COALESCE(SUM(sale_price - cost_price), 0) as margin,
         COALESCE(SUM(cost_price), 0)              as invested
       FROM sales
-      WHERE EXTRACT(YEAR FROM sale_date) = ${period.year}
+      WHERE EXTRACT(YEAR FROM sale_date) = ${period.year} AND deleted_at IS NULL
     `
   } else if (period.type === 'month') {
     salesRows = await sql`
@@ -43,6 +44,7 @@ async function getDashboardData(period: PeriodMode) {
       FROM sales
       WHERE EXTRACT(YEAR  FROM sale_date) = ${period.year}
         AND EXTRACT(MONTH FROM sale_date) = ${period.month}
+        AND deleted_at IS NULL
     `
   } else {
     salesRows = await sql`
@@ -53,14 +55,15 @@ async function getDashboardData(period: PeriodMode) {
       FROM sales
       WHERE EXTRACT(MONTH FROM sale_date) = EXTRACT(MONTH FROM NOW())
         AND EXTRACT(YEAR  FROM sale_date) = EXTRACT(YEAR  FROM NOW())
+        AND deleted_at IS NULL
     `
   }
 
   const [stockRows, leadsRows, oldestCars, mktValue] = await Promise.all([
     // Estoque por status
-    sql`SELECT status, COUNT(*) as count FROM cars WHERE status != 'sold' GROUP BY status`,
+    sql`SELECT status, COUNT(*) as count FROM cars WHERE status != 'sold' AND deleted_at IS NULL GROUP BY status`,
     // Leads por status
-    sql`SELECT status, COUNT(*) as count FROM leads GROUP BY status`,
+    sql`SELECT status, COUNT(*) as count FROM leads WHERE deleted_at IS NULL GROUP BY status`,
     // Carros parados há mais tempo
     sql`
       SELECT c.*,
@@ -69,7 +72,7 @@ async function getDashboardData(period: PeriodMode) {
         CURRENT_DATE - CAST(COALESCE(c.acquisition_date, c.created_at::date) AS date) as days_in_stock
       FROM cars c
       LEFT JOIN car_photos p ON p.car_id = c.id
-      WHERE c.status = 'available'
+      WHERE c.status = 'available' AND c.deleted_at IS NULL
       GROUP BY c.id
       ORDER BY days_in_stock DESC NULLS LAST, c.created_at ASC
       LIMIT 6
@@ -82,7 +85,7 @@ async function getDashboardData(period: PeriodMode) {
         COUNT(*) FILTER (WHERE cost_price IS NULL OR cost_price = 0) as no_margin,
         COUNT(*) as total
       FROM cars
-      WHERE status = 'available'
+      WHERE status = 'available' AND deleted_at IS NULL
     `,
   ])
 

@@ -11,7 +11,7 @@ import CopyAdLinkButton from '@/components/CopyAdLinkButton'
 
 async function getLeads() {
   await connection()
-  return sql`SELECT id, name, phone FROM leads ORDER BY name` as unknown as Promise<{ id: string; name: string; phone: string }[]>
+  return sql`SELECT id, name, phone FROM leads WHERE deleted_at IS NULL ORDER BY name` as unknown as Promise<{ id: string; name: string; phone: string }[]>
 }
 
 async function getCar(id: string) {
@@ -22,7 +22,7 @@ async function getCar(id: string) {
         FILTER (WHERE p.id IS NOT NULL), '[]') AS photos
     FROM cars c
     LEFT JOIN car_photos p ON p.car_id = c.id
-    WHERE c.id = ${id}
+    WHERE c.id = ${id} AND c.deleted_at IS NULL
     GROUP BY c.id
   `
   return car ?? null

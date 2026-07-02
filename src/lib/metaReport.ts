@@ -59,12 +59,14 @@ export async function getTrafficReport(year: number, month: number): Promise<Tra
       SELECT COUNT(*) AS count FROM leads
       WHERE source = 'trafego_pago'
         AND created_at::date BETWEEN ${week.start} AND ${week.end}
+        AND deleted_at IS NULL
     `
     const salesRows = await sql`
       SELECT s.sale_price, s.cost_price FROM sales s
       JOIN leads l ON l.id = s.lead_id
       WHERE l.source = 'trafego_pago'
         AND s.sale_date BETWEEN ${week.start} AND ${week.end}
+        AND s.deleted_at IS NULL
     ` as unknown as { sale_price: string; cost_price: string }[]
 
     const revenue = salesRows.reduce((sum, s) => sum + parseFloat(s.sale_price), 0)

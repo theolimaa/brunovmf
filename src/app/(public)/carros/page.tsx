@@ -7,7 +7,7 @@ import { WHATSAPP_NUMBER } from '@/lib/whatsappConfig'
 
 async function getCars(searchParams: Record<string, string | undefined>): Promise<Car[]> {
   await connection()
-  const conditions: string[] = ["c.status != 'sold'"]
+  const conditions: string[] = ["c.status != 'sold'", 'c.deleted_at IS NULL']
   const params: (string | number)[] = []
   let idx = 1
 
@@ -50,7 +50,7 @@ async function getCars(searchParams: Record<string, string | undefined>): Promis
 
 async function getBrands(): Promise<string[]> {
   await connection()
-  const rows = await sql`SELECT DISTINCT brand FROM cars WHERE status != 'sold' ORDER BY brand`
+  const rows = await sql`SELECT DISTINCT brand FROM cars WHERE status != 'sold' AND deleted_at IS NULL ORDER BY brand`
   return rows.map(r => (r as { brand: string }).brand)
 }
 

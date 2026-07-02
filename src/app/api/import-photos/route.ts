@@ -30,7 +30,7 @@ export async function POST() {
            !SKIP_PREFIXES.some(skip => lower.startsWith(skip))
   })
 
-  const cars = await sql`SELECT id, brand, model FROM cars ORDER BY created_at DESC` as { id: string; brand: string; model: string }[]
+  const cars = await sql`SELECT id, brand, model FROM cars WHERE deleted_at IS NULL ORDER BY created_at DESC` as { id: string; brand: string; model: string }[]
 
   const results: Array<{ file: string; car: string | null; status: string }> = []
 

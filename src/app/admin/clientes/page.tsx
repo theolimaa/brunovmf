@@ -10,6 +10,7 @@ async function getLeads(): Promise<Lead[]> {
       CASE WHEN c.id IS NOT NULL THEN row_to_json(c) ELSE NULL END AS car
     FROM leads l
     LEFT JOIN cars c ON c.id = l.car_id
+    WHERE l.deleted_at IS NULL
     ORDER BY l.created_at DESC
   ` as unknown as Promise<Lead[]>
 }
@@ -19,7 +20,7 @@ async function getAvailableCars(): Promise<Car[]> {
   return sql`
     SELECT id, brand, model, year, price, status
     FROM cars
-    WHERE status != 'sold'
+    WHERE status != 'sold' AND deleted_at IS NULL
     ORDER BY brand, model
   ` as unknown as Promise<Car[]>
 }
