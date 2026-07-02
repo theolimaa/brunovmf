@@ -1,7 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <rect width="512" height="512" rx="96" fill="#0D0D0D"/>
-  <circle cx="256" cy="256" r="132" fill="none" stroke="#FFFFFF" stroke-width="24"/>
-  <line x1="150" y1="378" x2="366" y2="134" stroke="#E86020" stroke-width="26" stroke-linecap="round"/>
-  <text x="208" y="248" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="108" fill="#FFFFFF" text-anchor="middle" dominant-baseline="central">B</text>
-  <text x="300" y="336" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="108" fill="#FFFFFF" text-anchor="middle" dominant-baseline="central">F</text>
+  <polygon points="512,0 512,180 332,0" fill="#E86020"/>
+  <text x="216" y="272" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="320" fill="#FFFFFF" text-anchor="middle" dominant-baseline="central">B</text>
 </svg>
